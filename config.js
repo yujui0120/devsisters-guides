@@ -12,86 +12,87 @@ const CONFIG = {
       id: "ovenbreak",
       name: "跑跑薑餅人：烤箱大逃亡",
       icon: "fa-person-running",
-      hiddenHashtags: [
-        "#烤箱大逃亡",
-        "#CookieRunOvenBreak",
-        "#OvenBreak",
-        "#CROB",
-        "#쿠키런"
+      keywords: [
+        "跑跑薑餅人",
+        "烤箱大逃亡",
+        "CookieRunOvenBreak",
+        "OvenBreak",
+        "CROB",
+        "쿠키런"
       ]
     },
     {
       id: "kingdom",
       name: "薑餅人王國",
       icon: "fa-crown",
-      hiddenHashtags: [
-        "#薑餅人王國",
-        "#CookieRunKingdom",
-        "#Kingdom",
-        "#CRK",
-        "#쿠키런킹덤"
+      keywords: [
+        "薑餅人王國",
+        "CookieRunKingdom",
+        "Kingdom",
+        "CRK",
+        "쿠키런킹덤"
       ]
     },
     {
       id: "tower",
       name: "薑餅人之塔",
       icon: "fa-chess-rook",
-      hiddenHashtags: [
-        "#薑餅人之塔",
-        "#之塔",
-        "#CookieRunTowerOfAdventures",
-        "#TowerOfAdventures",
-        "#CRTOA",
-        "#TOA",
-        "#모험의탑"
+      keywords: [
+        "薑餅人之塔",
+        "之塔",
+        "CookieRunTowerOfAdventures",
+        "TowerOfAdventures",
+        "CRTOA",
+        "TOA",
+        "모험의탑"
       ]
     },
     {
       id: "witchcastle",
       name: "薑餅人魔女之城",
       icon: "fa-hat-wizard",
-      hiddenHashtags: [
-        "#薑餅人魔女之城",
-        "#魔女之城",
-        "#CookieRunWitchsCastle",
-        "#WitchCastle",
-        "#CRWC",
-        "#마녀의성"
+      keywords: [
+        "薑餅人魔女之城",
+        "魔女之城",
+        "CookieRunWitchsCastle",
+        "WitchCastle",
+        "CRWC",
+        "마녀의성"
       ]
     },
     {
       id: "classic",
       name: "薑餅人經典版",
       icon: "fa-star",
-      hiddenHashtags: [
-        "#薑餅人經典版",
-        "#經典版",
-        "#CookieRunClassic",
-        "#Classic",
-        "#CRC",
-        "#쿠키런클래식"
+      keywords: [
+        "薑餅人經典版",
+        "經典版",
+        "CookieRunClassic",
+        "Classic",
+        "CRC",
+        "쿠키런클래식"
       ]
     },
     {
       id: "brawl",
       name: "薑餅人大亂鬥",
       icon: "fa-fire-flame-curved",
-      hiddenHashtags: [
-        "#薑餅人大亂鬥",
-        "#大亂鬥",
-        "#CookieRunOvenSmash",
-        "#OvenSmash",
-        "#오븐스매시"
+      keywords: [
+        "薑餅人大亂鬥",
+        "大亂鬥",
+        "CookieRunOvenSmash",
+        "OvenSmash",
+        "오븐스매시"
       ]
     },
     {
       id: "idle",
       name: "薑餅人放置大戰爭",
       icon: "fa-shield-halved",
-      hiddenHashtags: [
-        "#薑餅人放置大戰爭",
-        "#CookieRunIdle",
-        "#放置大戰爭"
+      keywords: [
+        "薑餅人放置大戰爭",
+        "CookieRunIdle",
+        "放置大戰爭"
       ]
     }
   ]
