@@ -1,6 +1,6 @@
 const CONFIG = {
   GAS_URL: "https://script.google.com/macros/s/AKfycbz_unyIgEY2kiTxCtMdWG-1H--6sLqh5Py1yYqec65lZCl5qq1qK18pDrVMfUEzLOT-jA/exec",
-  MAX_VIDEOS_PER_TOPIC: 30,
+  MAX_VIDEOS_PER_TOPIC: 50,
   CHANNEL_IDS: [
     "UCU9oAVsg-RghFBApVBjVn5A", //M神
     "UC4O0Bsolr3brLF1jdo9v-jg", //蹦蹦林
