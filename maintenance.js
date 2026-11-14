@@ -1,6 +1,6 @@
 (function() {
   const startTime = new Date("2026-11-13T00:30:00+08:00");
-  const endTime = new Date("2026-11-17T15:00:00+08:00");
+  const endTime = new Date("2026-11-14T15:37:00+08:00");
   const now = new Date();
 
   if (now >= startTime && now <= endTime) {
