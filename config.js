@@ -1,14 +1,12 @@
 const CONFIG = {
   GAS_URL: "https://script.google.com/macros/s/AKfycbz_unyIgEY2kiTxCtMdWG-1H--6sLqh5Py1yYqec65lZCl5qq1qK18pDrVMfUEzLOT-jA/exec",
   MAX_VIDEOS_PER_TOPIC: 30,
-
   CHANNEL_IDS: [
     "UCT7W2GVaHtBuTu3kZJB0GwQ",
     "UCU9oAVsg-RghFBApVBjVn5A",
     "UC4O0Bsolr3brLF1jdo9v-jg",
     "UCG0QOZXtIAKYKUqzJbX45Fw"
   ],
-
   TOPICS: [
     {
       id: "ovenbreak",
