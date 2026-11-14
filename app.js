@@ -43,7 +43,9 @@ function buildTopicVideosMap(rawVideos) {
       const isMatch = (topic.hiddenHashtags || []).some(ruleTag => {
         const cleanRule = ruleTag.trim().toLowerCase();
         if (!cleanRule) return false;
-        return fullText.includes(cleanRule);
+        const withoutHash = cleanRule.startsWith("#") ? cleanRule.slice(1) : cleanRule;
+        const withHash = cleanRule.startsWith("#") ? cleanRule : `#${cleanRule}`;
+        return fullText.includes(withoutHash) || fullText.includes(withHash);
       });
 
       if (isMatch) {
