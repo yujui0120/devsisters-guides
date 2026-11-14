@@ -6,9 +6,26 @@ let selectedDetailChannelId = "all";
 let searchQuery = "";
 let detailSortBy = "newest";
 
-function getVideoSearchableText(video) {
-  const tagsStr = Array.isArray(video.tags) ? video.tags.join(" ") : "";
-  return `${video.title || ""} ${tagsStr}`.toLowerCase();
+function getVideoTagsSet(video) {
+  const tagsSet = new Set();
+  if (Array.isArray(video.tags)) {
+    video.tags.forEach(t => {
+      if (t) {
+        const cleaned = t.trim().toLowerCase();
+        tagsSet.add(cleaned);
+        tagsSet.add(cleaned.startsWith("#") ? cleaned : `#${cleaned}`);
+      }
+    });
+  }
+  if (video.title) {
+    const matches = video.title.match(/#[\w\u4e00-\u9fa5\u3130-\u318F\uAC00-\uD7AF]+/g) || [];
+    matches.forEach(m => {
+      const cleaned = m.trim().toLowerCase();
+      tagsSet.add(cleaned);
+      tagsSet.add(cleaned.startsWith("#") ? cleaned.slice(1) : cleaned);
+    });
+  }
+  return tagsSet;
 }
 
 function buildTopicVideosMap(rawVideos) {
@@ -38,17 +55,18 @@ function buildTopicVideosMap(rawVideos) {
   );
 
   for (const video of sortedUniqueVideos) {
-    const searchableText = getVideoSearchableText(video);
+    const videoTags = getVideoTagsSet(video);
 
     for (const topic of CONFIG.TOPICS) {
       const list = map.get(topic.id);
       if (list.length >= maxPerTopic) continue;
 
       const isMatch = (topic.hiddenHashtags || []).some(ruleTag => {
-        const cleanTag = ruleTag.trim().toLowerCase();
-        if (!cleanTag) return false;
-        const noHashTag = cleanTag.startsWith("#") ? cleanTag.slice(1) : cleanTag;
-        return searchableText.includes(cleanTag) || searchableText.includes(noHashTag);
+        const cleanRule = ruleTag.trim().toLowerCase();
+        if (!cleanRule) return false;
+        const withHash = cleanRule.startsWith("#") ? cleanRule : `#${cleanRule}`;
+        const withoutHash = cleanRule.startsWith("#") ? cleanRule.slice(1) : cleanRule;
+        return videoTags.has(withHash) || videoTags.has(withoutHash);
       });
 
       if (isMatch) {
