@@ -91,7 +91,7 @@ async function refreshVideoData() {
     }
 
     if (data.lastUpdated) {
-      updateTimeEl.innerHTML = `<i class="fa-regular fa-clock text-amber-400"></i><span>上次更新時間：${escapeHtml(data.lastUpdated)}（會在 15 分鐘內更新）</span>`;
+      updateTimeEl.innerHTML = `<i class="fa-regular fa-clock text-amber-400"></i><span>上次更新時間：${escapeHtml(data.lastUpdated)}（每15分鐘更新一次）</span>`;
     }
 
     topicVideosMap = buildTopicVideosMap(data.items || []);
