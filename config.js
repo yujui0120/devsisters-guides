@@ -13,7 +13,7 @@ const CONFIG = {
       name: "跑跑薑餅人：烤箱大逃亡",
       icon: "fa-person-running",
       hiddenHashtags: [
-        "#跑跑薑餅人",
+        "#跑跑",
         "#烤箱大逃亡",
         "#CookieRunOvenBreak",
         "#OvenBreak",
@@ -26,7 +26,7 @@ const CONFIG = {
       name: "薑餅人王國",
       icon: "fa-crown",
       hiddenHashtags: [
-        "#薑餅人王國",
+        "#王國",
         "#CookieRunKingdom",
         "#Kingdom",
         "#CRK",
@@ -38,7 +38,7 @@ const CONFIG = {
       name: "薑餅人之塔",
       icon: "fa-chess-rook",
       hiddenHashtags: [
-        "#薑餅人之塔",
+        "#之塔",
         "#CookieRunTowerOfAdventures",
         "#TowerOfAdventures",
         "#CRTOA",
@@ -51,7 +51,6 @@ const CONFIG = {
       name: "薑餅人魔女之城",
       icon: "fa-hat-wizard",
       hiddenHashtags: [
-        "#薑餅人魔女之城",
         "#魔女之城",
         "#CookieRunWitchsCastle",
         "#WitchCastle",
@@ -64,9 +63,7 @@ const CONFIG = {
       name: "薑餅人經典版",
       icon: "fa-star",
       hiddenHashtags: [
-        "#薑餅人經典版",
         "#經典版",
-        "#CookieRunClassic",
         "#Classic",
         "#CRC",
         "#쿠키런클래식"
@@ -77,9 +74,7 @@ const CONFIG = {
       name: "薑餅人大亂鬥",
       icon: "fa-fire-flame-curved",
       hiddenHashtags: [
-        "#薑餅人大亂鬥",
         "#大亂鬥",
-        "#CookieRunOvenSmash",
         "#OvenSmash",
         "#오븐스매시"
       ]
@@ -89,7 +84,6 @@ const CONFIG = {
       name: "薑餅人放置大戰爭",
       icon: "fa-shield-halved",
       hiddenHashtags: [
-        "#薑餅人放置大戰爭",
         "#CookieRunIdle",
         "#放置大戰爭"
       ]
