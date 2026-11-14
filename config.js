@@ -2,10 +2,12 @@ const CONFIG = {
   GAS_URL: "https://script.google.com/macros/s/AKfycbz_unyIgEY2kiTxCtMdWG-1H--6sLqh5Py1yYqec65lZCl5qq1qK18pDrVMfUEzLOT-jA/exec",
   MAX_VIDEOS_PER_TOPIC: 30,
   CHANNEL_IDS: [
-    "UCT7W2GVaHtBuTu3kZJB0GwQ",
-    "UCU9oAVsg-RghFBApVBjVn5A",
-    "UC4O0Bsolr3brLF1jdo9v-jg",
-    "UCG0QOZXtIAKYKUqzJbX45Fw"
+    "UCU9oAVsg-RghFBApVBjVn5A", //M神
+    "UC4O0Bsolr3brLF1jdo9v-jg", //蹦蹦林
+    "UCG0QOZXtIAKYKUqzJbX45Fw", //香香
+    "UCh9bqVA6SOKjOmnEFgWKrVw", //GPZ(烤箱)
+    "UCHW15T0wXV9ocDzuXev9_jQ", //BU(經典版)
+    ""
   ],
   TOPICS: [
     {
