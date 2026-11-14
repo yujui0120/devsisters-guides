@@ -10,7 +10,7 @@ const CONFIG = {
   TOPICS: [
     {
       id: "ovenbreak",
-      name: "跑跑薑餅人",
+      name: "跑跑薑餅人：烤箱大逃亡",
       icon: "fa-person-running",
       hiddenHashtags: [
         "#跑跑薑餅人",
