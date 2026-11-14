@@ -111,8 +111,8 @@
       <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-amber-100 text-amber-600 mb-3">
         <i class="fa-solid fa-spinner fa-spin text-2xl"></i>
       </div>
-      <p class="text-base font-bold text-cookie-choco">正在讀取頻道最新影片...</p>
-      <p class="text-xs text-cookie-cocoa/75 mt-1">感謝您的使用！<br>如果還沒加入我們的，歡迎加入我們的Discord攻略群組！連結在網頁最下方！</p>
+      <p class="text-base font-bold text-[#3E2723]">正在讀取頻道最新影片...</p>
+      <p class="text-xs text-[#5D4037]/75 mt-1">感謝您的使用！<br>如果還沒加入我們的，歡迎加入我們的Discord攻略群組！連結在網頁最下方！</p>
     </div>
 
     <div id="statusAlertBox" class="hidden mb-6 rounded-2xl p-4 border text-sm flex items-start gap-3"></div>
@@ -125,7 +125,7 @@
           <button
             id="backToOverviewBtn"
             type="button"
-            class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-amber-100/80 hover:bg-amber-200/80 text-cookie-choco font-bold text-xs sm:text-sm transition cursor-pointer"
+            class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-amber-100/80 hover:bg-amber-200/80 text-[#3E2723] font-bold text-xs sm:text-sm transition cursor-pointer"
           >
             <i class="fa-solid fa-arrow-left"></i>
             <span>返回所有遊戲總覽</span>
@@ -143,17 +143,17 @@
               <i class="fa-solid fa-gamepad text-xl"></i>
             </div>
             <div>
-              <h2 id="detailTopicTitle" class="text-xl sm:text-2xl font-black text-cookie-choco">
+              <h2 id="detailTopicTitle" class="text-xl sm:text-2xl font-black text-[#3E2723]">
                 主題名稱
               </h2>
             </div>
           </div>
 
           <div class="flex items-center gap-2 self-end sm:self-center shrink-0">
-            <label for="detailSortSelect" class="text-xs font-bold text-cookie-cocoa">排序：</label>
+            <label for="detailSortSelect" class="text-xs font-bold text-[#5D4037]">排序：</label>
             <select
               id="detailSortSelect"
-              class="text-xs sm:text-sm font-medium bg-amber-50/70 border border-amber-300/80 text-cookie-choco rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-amber-400"
+              class="text-xs sm:text-sm font-medium bg-amber-50/70 border border-amber-300/80 text-[#3E2723] rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-amber-400"
             >
               <option value="newest">最新發布優先</option>
               <option value="oldest">較早發布優先</option>
@@ -164,11 +164,11 @@
 
         <div id="detailActiveChannelsSection" class="mt-5 pt-4 border-t border-amber-100">
           <div class="flex items-center justify-between gap-2 mb-2.5 flex-wrap">
-            <h3 class="text-xs sm:text-sm font-extrabold text-cookie-choco flex items-center gap-2">
+            <h3 class="text-xs sm:text-sm font-extrabold text-[#3E2723] flex items-center gap-2">
               <i class="fa-brands fa-youtube text-red-600 text-base"></i>
               <span>本主題收錄影片的頻道（點擊可篩選或前往頻道）：</span>
             </h3>
-            <span id="detailChannelCountText" class="text-xs font-semibold text-cookie-cocoa/75">
+            <span id="detailChannelCountText" class="text-xs font-semibold text-[#5D4037]/75">
               共 0 個頻道
             </span>
           </div>
@@ -182,18 +182,18 @@
         <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-amber-100 text-amber-600 mb-3">
           <i class="fa-solid fa-film text-2xl"></i>
         </div>
-        <h3 class="text-base sm:text-lg font-extrabold text-cookie-choco">此主題目前尚無符合條件的攻略影片</h3>
-        <p class="text-xs sm:text-sm text-cookie-cocoa/80 max-w-md mx-auto mt-1">
+        <h3 class="text-base sm:text-lg font-extrabold text-[#3E2723]">此主題目前尚無符合條件的攻略影片</h3>
+        <p class="text-xs sm:text-sm text-[#5D4037]/80 max-w-md mx-auto mt-1">
           請清除目前的搜尋或頻道篩選條件再試一次。
         </p>
       </div>
 
       <div class="rounded-2xl bg-amber-50/90 border border-amber-200/90 p-5 text-center space-y-2.5">
-        <p class="text-sm sm:text-base font-extrabold text-cookie-choco flex items-center justify-center gap-2">
+        <p class="text-sm sm:text-base font-extrabold text-[#3E2723] flex items-center justify-center gap-2">
           <i class="fa-solid fa-circle-info text-amber-600"></i>
           <span>若您想要找尋更先前的影片 請至該頻道搜尋</span>
         </p>
-        <p class="text-xs text-cookie-cocoa/80">
+        <p class="text-xs text-[#5D4037]/80">
           （為維持瀏覽效能，單個主題最多收錄最新 30 部攻略影片）
         </p>
         <div id="detailFooterChannelLinks" class="flex flex-wrap items-center justify-center gap-2 pt-1"></div>
@@ -201,8 +201,8 @@
     </section>
   </main>
 
-  <footer class="bg-cookie-choco text-amber-100/90 border-t-4 border-amber-600 mt-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center space-y-1.5">
+  <footer style="background-color: #3E2723 !important;" class="text-amber-100 border-t-4 border-amber-600 mt-12 py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-1.5">
       <p class="text-sm sm:text-base font-bold tracking-wide text-white">
         網頁維護：餅乾基地Discord管理團隊
       </p>
@@ -228,7 +228,7 @@
     aria-labelledby="modalVideoTitle"
   >
     <div class="bg-white rounded-3xl max-w-4xl w-full overflow-hidden shadow-2xl border border-amber-200 flex flex-col max-h-[92vh]">
-      <div class="flex items-center justify-between px-5 py-3.5 bg-cookie-choco text-white">
+      <div class="flex items-center justify-between px-5 py-3.5 bg-[#3E2723] text-white">
         <div class="flex items-center gap-2 min-w-0">
           <i class="fa-brands fa-youtube text-red-500 text-xl shrink-0"></i>
           <h3 id="modalVideoTitle" class="font-bold text-sm sm:text-base truncate">
@@ -257,10 +257,10 @@
         ></iframe>
       </div>
 
-      <div class="p-4 sm:p-5 bg-amber-50/70 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div class="p-4 sm:p-5 bg-amber-50/90 border-t border-amber-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <p id="modalChannelInfo" class="text-sm font-bold text-cookie-choco"></p>
-          <p id="modalPublishInfo" class="text-xs text-cookie-cocoa/80 mt-0.5"></p>
+          <p id="modalChannelInfo" class="text-sm font-bold text-[#3E2723]"></p>
+          <p id="modalPublishInfo" class="text-xs text-[#5D4037] mt-0.5 font-medium"></p>
         </div>
         <a
           id="modalExternalLink"
