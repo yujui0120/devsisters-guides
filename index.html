@@ -1,78 +1,93 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Devsisters 攻略影片集合</title>
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-orange-500 selection:text-white">
-
-  <!-- Header -->
-  <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-30 shadow-md">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-      <div>
-        <h1 class="text-2xl font-black tracking-wider bg-gradient-to-r from-orange-400 to-amber-300 bg-clip-text text-transparent cursor-pointer" onclick="goHome()">
-          Devsisters 攻略影片集合
-        </h1>
-        <p class="text-xs text-slate-400 mt-0.5">匯集各大授權頻道的精選遊戲攻略與最新動態</p>
-        <!-- 更新時間顯示區塊 -->
-        <p id="updateTimeDisplay" class="text-[11px] text-slate-500 mt-1">上次更新時間：載入中...（會在 15 分鐘內更新）</p>
-      </div>
-      <div class="w-full sm:w-80">
-        <input type="text" id="globalSearch" placeholder="搜尋全站影片標題..." oninput="handleSearch(this.value)" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:border-orange-500 transition-colors">
-      </div>
-    </div>
-  </header>
-
-  <!-- Main Content -->
-  <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
-    <!-- Loading State -->
-    <div id="loadingState" class="flex flex-col items-center justify-center py-24">
-      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mb-4"></div>
-      <p class="text-slate-400 text-sm">正在從授權頻道同步最新影片資料...</p>
-    </div>
-
-    <!-- Error State -->
-    <div id="errorState" class="hidden bg-red-950/50 border border-red-800 rounded-xl p-6 text-center my-12">
-      <h3 class="text-red-400 font-bold text-lg mb-2">無法載入影片資料</h3>
-      <p id="errorMessage" class="text-red-300 text-sm mb-4"></p>
-      <button onclick="loadYouTubeData()" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">重新載入</button>
-    </div>
-
-    <!-- Dynamic Content Container -->
-    <div id="appContainer" class="hidden space-y-12"></div>
-  </main>
-
-  <!-- Footer -->
-  <footer class="bg-slate-900 border-t border-slate-800 mt-16 py-8 text-center text-sm text-slate-400">
-    <p class="mb-2">網頁維護：餅乾基地Discord管理團隊</p>
-    <a href="https://example.com" target="_blank" rel="noopener noreferrer" class="text-orange-400 hover:text-orange-300 underline transition-colors">example.com(邀請連結)</a>
-  </footer>
-
-  <!-- Video Modal -->
-  <div id="videoModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4" onclick="closeModal(event)">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-4xl overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
-      <div class="flex justify-between items-center p-4 border-b border-slate-800">
-        <h3 id="modalTitle" class="font-bold text-lg truncate pr-4">影片播放</h3>
-        <button onclick="closeModal()" class="text-slate-400 hover:text-white p-1">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-        </button>
-      </div>
-      <div class="relative aspect-video bg-black">
-        <iframe id="modalIframe" class="w-full h-full" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-      </div>
-    </div>
-  </div>
+  <!-- Google Fonts: Noto Sans TC & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
   <script>
-    // ==========================================
-    // 設定區：頻道與分類關鍵字規則
-    // ==========================================
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Noto Sans TC"', '"Inter"', 'sans-serif'],
+          },
+          colors: {
+            cookie: {
+              cream: '#FFFDF9',
+              warm: '#FEF5E7',
+              amber: '#F59E0B',
+              caramel: '#D97706',
+              choco: '#3E2723',
+              cocoa: '#5D4037',
+              berry: '#E11D48',
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      background-color: #FFFDF9;
+      color: #291D18;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .video-card {
+      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
+    }
+    .video-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 28px -8px rgba(62, 39, 35, 0.14);
+    }
+
+    .hero-banner {
+      background: linear-gradient(135deg, #3E2723 0%, #5D4037 52%, #92400E 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-banner::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(251, 191, 36, 0.14) 1.5px, transparent 1.5px);
+      background-size: 24px 24px;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-amber-200 selection:text-amber-950">
+
+  <!-- =====================================================================
+       【管理員核心設定區 (CONFIG)】
+  ====================================================================== -->
+  <script>
     const CONFIG = {
+      // 1. Google Apps Script 後端代理網址（已內建 15 分鐘快取與 Shorts 過濾）
       GAS_URL: "https://script.google.com/macros/s/AKfycbz_unyIgEY2kiTxCtMdWG-1H--6sLqh5Py1yYqec65lZCl5qq1qK18pDrVMfUEzLOT-jA/exec",
 
-      // 授權頻道清單
+      // 2. 單個主題最多收錄與顯示的影片數量上限（已修改為 30 部）
+      MAX_VIDEOS_PER_TOPIC: 30,
+
+      // 3. 追蹤的 YouTube 頻道 ID 清單
       CHANNEL_IDS: [
         "UCT7W2GVaHtBuTu3kZJB0GwQ",
         "UCU9oAVsg-RghFBApVBjVn5A",
@@ -80,328 +95,967 @@
         "UCG0QOZXtIAKYKUqzJbX45Fw"
       ],
 
-      // 各主題遊戲分類與精準關鍵字
-      CATEGORIES: {
-        cookieRun: {
-          name: "跑跑薑餅人 (烤箱大逃亡)",
-          keywords: ["烤箱大逃亡", "ovenbreak", "cookierunovenbreak"]
+      // 4. 七大主題與隱藏 Hashtag / 關鍵字對應規則
+      TOPICS: [
+        {
+          id: "ovenbreak",
+          name: "跑跑薑餅人",
+          icon: "fa-person-running",
+          description: "烤箱大逃亡｜逃出團、冠軍聯賽、餅乾寵物寶物搭配與高分跑法",
+          hiddenHashtags: [
+            "#跑跑薑餅人",
+            "#烤箱大逃亡",
+            "#CookieRunOvenBreak",
+            "#OvenBreak",
+            "#CROB",
+            "#쿠키런"
+          ]
         },
-        kingdom: {
+        {
+          id: "kingdom",
           name: "薑餅人王國",
-          keywords: ["薑餅人王國", "王國", "cookierunkingdom", "kingdom"]
+          icon: "fa-crown",
+          description: "王國建設、競技場配隊、討伐戰高傷軸與守護之戰攻略",
+          hiddenHashtags: [
+            "#薑餅人王國",
+            "#王國",
+            "#CookieRunKingdom",
+            "#Kingdom",
+            "#CRK",
+            "#쿠키런킹덤"
+          ]
         },
-        tower: {
+        {
+          id: "tower",
           name: "薑餅人之塔",
-          keywords: ["薑餅人之塔", "之塔", "towerofadventures", "toa"]
+          icon: "fa-chess-rook",
+          description: "3D 多人協力冒險、討伐模式 Boss 機制與裝備詞條推薦",
+          hiddenHashtags: [
+            "#薑餅人之塔",
+            "#之塔",
+            "#CookieRunTowerOfAdventures",
+            "#TowerOfAdventures",
+            "#CRTOA",
+            "#TOA",
+            "#모험의탑"
+          ]
         },
-        witchCastle: {
+        {
+          id: "witchcastle",
           name: "薑餅人魔女之城",
-          keywords: ["魔女之城", "witchcastle"]
+          icon: "fa-hat-wizard",
+          description: "點擊爆破三消關卡、魔女之城裝飾與角色技能解析",
+          hiddenHashtags: [
+            "#薑餅人魔女之城",
+            "#魔女之城",
+            "#CookieRunWitchsCastle",
+            "#WitchCastle",
+            "#CRWC",
+            "#마녀의성"
+          ]
         },
-        classic: {
+        {
+          id: "classic",
           name: "薑餅人經典版",
-          keywords: ["經典版", "classic"]
+          icon: "fa-star",
+          description: "懷舊經典跑酷、記憶島挑戰與經典餅乾滿級配置",
+          hiddenHashtags: [
+            "#薑餅人經典版",
+            "#經典版",
+            "#CookieRunClassic",
+            "#Classic",
+            "#CRC",
+            "#쿠키런클래식"
+          ]
         },
-        brawl: {
+        {
+          id: "brawl",
           name: "薑餅人大亂鬥",
-          keywords: ["大亂鬥", "brawl"]
+          icon: "fa-fire-flame-curved",
+          description: "OvenSmash 多人即時對戰、地圖走位技巧與餅乾技能連段",
+          hiddenHashtags: [
+            "#薑餅人大亂鬥",
+            "#大亂鬥",
+            "#CookieRunOvenSmash",
+            "#OvenSmash",
+            "#Brawl",
+            "#오븐스매시"
+          ]
         },
-        idleWar: {
+        {
+          id: "idle",
           name: "薑餅人放置大戰爭",
-          keywords: ["放置大戰爭", "idle"]
+          icon: "fa-shield-halved",
+          description: "輕鬆掛機養成、資源分配優先度與推圖陣容推薦",
+          hiddenHashtags: [
+            "#薑餅人放置大戰爭",
+            "#CookieRunIdle",
+            "#薑餅人放置",
+            "#放置大戰爭"
+          ]
+        }
+      ]
+    };
+  </script>
+
+  <!-- =====================================================================
+       1. 頁首 (Header)
+  ====================================================================== -->
+  <header class="hero-banner text-white shadow-lg border-b-4 border-amber-500">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 relative z-10">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <!-- 左側主標題區 -->
+        <div class="flex items-center gap-3.5 sm:gap-4">
+          <button
+            id="brandHomeBtn"
+            type="button"
+            class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center shadow-lg border-2 border-amber-200/60 shrink-0 hover:scale-105 transition cursor-pointer"
+            title="回到所有遊戲總覽"
+          >
+            <i class="fa-solid fa-cookie-bite text-2xl sm:text-3xl text-amber-950"></i>
+          </button>
+          <div>
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30">
+              DEVSISTERS GUIDE HUB
+            </span>
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-white mt-1 drop-shadow-sm">
+              <a href="#overview" id="headerTitleLink" class="hover:text-amber-200 transition">
+                Devsisters 攻略影片集合
+              </a>
+            </h1>
+            <p class="text-xs sm:text-sm text-amber-100/80 mt-1">
+              集結跑跑薑餅人系列全作品精選實況與攻略影片索引
+            </p>
+            <!-- 上次更新時間顯示 -->
+            <p id="updateTimeDisplay" class="text-[11px] sm:text-xs text-amber-200/90 mt-1.5 flex items-center gap-1.5">
+              <i class="fa-regular fa-clock text-amber-400"></i>
+              <span>上次更新時間：載入中...（會在 15 分鐘內更新）</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- 右側快速搜尋框 -->
+        <div class="relative w-full md:w-72">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-amber-200/70 text-sm"></i>
+          <input
+            id="searchInput"
+            type="text"
+            placeholder="搜尋影片標題或頻道..."
+            class="w-full pl-9 pr-8 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 focus:bg-white/20 text-white placeholder-amber-100/60 text-sm border border-amber-300/25 focus:border-amber-400 focus:outline-none transition"
+          />
+          <button
+            id="clearSearchBtn"
+            type="button"
+            title="清除搜尋"
+            class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-amber-200/80 hover:text-white p-1"
+          >
+            <i class="fa-solid fa-xmark text-xs"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- =====================================================================
+       2. 主內容區 (Main Content)
+  ====================================================================== -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+    <!-- 載入中狀態 -->
+    <div id="loadingState" class="hidden py-16 text-center">
+      <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-amber-100 text-amber-600 mb-3">
+        <i class="fa-solid fa-spinner fa-spin text-2xl"></i>
+      </div>
+      <p class="text-base font-bold text-cookie-choco">正在讀取攻略頻道最新影片...</p>
+      <p class="text-xs text-cookie-cocoa/75 mt-1">已自動過濾 Shorts，單個主題最多收錄 30 部最新攻略影片</p>
+    </div>
+
+    <!-- 錯誤提示訊息盒 -->
+    <div id="statusAlertBox" class="hidden mb-6 rounded-2xl p-4 border text-sm flex items-start gap-3"></div>
+
+    <!-- 【模式 A：所有遊戲上下並排總覽視圖】 -->
+    <div id="overviewContainer" class="space-y-8 sm:space-y-10"></div>
+
+    <!-- 【模式 B：單一主題完整檢視頁面】 -->
+    <section id="topicDetailContainer" class="hidden space-y-6">
+      <div class="bg-white border border-amber-200/90 rounded-3xl p-5 sm:p-6 shadow-xs">
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-4 mb-4 border-b border-amber-100">
+          <button
+            id="backToOverviewBtn"
+            type="button"
+            class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-amber-100/80 hover:bg-amber-200/80 text-cookie-choco font-bold text-xs sm:text-sm transition cursor-pointer"
+          >
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>返回所有遊戲總覽</span>
+          </button>
+
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200">
+            <i class="fa-solid fa-layer-group text-amber-600"></i>
+            <span>單個主題最多顯示 30 部最新影片</span>
+          </span>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="flex items-start sm:items-center gap-3.5">
+            <div id="detailTopicIconBox" class="w-12 h-12 rounded-2xl bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-sm">
+              <i class="fa-solid fa-gamepad text-xl"></i>
+            </div>
+            <div>
+              <div class="flex items-center gap-2.5 flex-wrap">
+                <h2 id="detailTopicTitle" class="text-xl sm:text-2xl font-black text-cookie-choco">
+                  主題名稱
+                </h2>
+              </div>
+              <p id="detailTopicDesc" class="text-xs sm:text-sm text-cookie-cocoa/80 mt-1">
+                主題說明
+              </p>
+            </div>
+          </div>
+
+          <!-- 排序選項 -->
+          <div class="flex items-center gap-2 self-end sm:self-center shrink-0">
+            <label for="detailSortSelect" class="text-xs font-bold text-cookie-cocoa">排序：</label>
+            <select
+              id="detailSortSelect"
+              class="text-xs sm:text-sm font-medium bg-amber-50/70 border border-amber-300/80 text-cookie-choco rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-amber-400"
+            >
+              <option value="newest">最新發布優先</option>
+              <option value="oldest">較早發布優先</option>
+              <option value="channel">依頻道名稱</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 該頁面所有「有影片的頻道」清單列 -->
+        <div id="detailActiveChannelsSection" class="mt-5 pt-4 border-t border-amber-100">
+          <div class="flex items-center justify-between gap-2 mb-2.5 flex-wrap">
+            <h3 class="text-xs sm:text-sm font-extrabold text-cookie-choco flex items-center gap-2">
+              <i class="fa-brands fa-youtube text-red-600 text-base"></i>
+              <span>本主題收錄影片的頻道（點擊可篩選或前往頻道）：</span>
+            </h3>
+            <span id="detailChannelCountText" class="text-xs font-semibold text-cookie-cocoa/75">
+              共 0 個頻道
+            </span>
+          </div>
+          <div id="detailChannelsList" class="flex flex-wrap items-center gap-2"></div>
+        </div>
+      </div>
+
+      <!-- 單一主題完整影片網格 (最多 30 部) -->
+      <div id="detailVideoGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6"></div>
+
+      <!-- 單一主題空狀態 -->
+      <div id="detailEmptyState" class="hidden py-14 px-4 text-center bg-white rounded-3xl border border-dashed border-amber-300">
+        <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-amber-100 text-amber-600 mb-3">
+          <i class="fa-solid fa-film text-2xl"></i>
+        </div>
+        <h3 class="text-base sm:text-lg font-extrabold text-cookie-choco">此主題目前尚無符合條件的攻略影片</h3>
+        <p class="text-xs sm:text-sm text-cookie-cocoa/80 max-w-md mx-auto mt-1">
+          請清除目前的搜尋或頻道篩選條件再試一次。
+        </p>
+      </div>
+
+      <!-- 底部固定提示區塊 -->
+      <div class="rounded-2xl bg-amber-50/90 border border-amber-200/90 p-5 text-center space-y-2.5">
+        <p class="text-sm sm:text-base font-extrabold text-cookie-choco flex items-center justify-center gap-2">
+          <i class="fa-solid fa-circle-info text-amber-600"></i>
+          <span>若您想要找尋更先前的影片 請至該頻道搜尋</span>
+        </p>
+        <p class="text-xs text-cookie-cocoa/80">
+          （為維持瀏覽效能，單個主題最多收錄最新 30 部攻略影片）
+        </p>
+        <div id="detailFooterChannelLinks" class="flex flex-wrap items-center justify-center gap-2 pt-1"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =====================================================================
+       3. 頁尾 (Footer)
+  ====================================================================== -->
+  <footer class="bg-cookie-choco text-amber-100/90 border-t-4 border-amber-600 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center space-y-1.5">
+      <p class="text-sm sm:text-base font-bold tracking-wide text-white">
+        網頁維護：餅乾基地Discord管理團隊
+      </p>
+      <p class="text-sm">
+        <a
+          href="https://example.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-1.5 text-amber-300 hover:text-amber-200 underline decoration-amber-400/60 underline-offset-4 font-semibold transition"
+        >
+          <i class="fa-brands fa-discord"></i>
+          <span>example.com(邀請連結)</span>
+        </a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- =====================================================================
+       4. 影片播放 Modal (點擊卡片時開啟)
+  ====================================================================== -->
+  <div
+    id="videoModal"
+    class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-3 sm:p-6"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalVideoTitle"
+  >
+    <div class="bg-white rounded-3xl max-w-4xl w-full overflow-hidden shadow-2xl border border-amber-200 flex flex-col max-h-[92vh]">
+      <div class="flex items-center justify-between px-5 py-3.5 bg-cookie-choco text-white">
+        <div class="flex items-center gap-2 min-w-0">
+          <i class="fa-brands fa-youtube text-red-500 text-xl shrink-0"></i>
+          <h3 id="modalVideoTitle" class="font-bold text-sm sm:text-base truncate">
+            影片標題
+          </h3>
+        </div>
+        <button
+          id="closeVideoModalBtn"
+          type="button"
+          class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition shrink-0 ml-2"
+          aria-label="關閉播放器"
+        >
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div class="relative w-full bg-black aspect-video">
+        <iframe
+          id="youtubeIframe"
+          class="absolute inset-0 w-full h-full"
+          src=""
+          title="YouTube 攻略影片播放器"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+        ></iframe>
+      </div>
+
+      <div class="p-4 sm:p-5 bg-amber-50/70 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <p id="modalChannelInfo" class="text-sm font-bold text-cookie-choco"></p>
+          <p id="modalPublishInfo" class="text-xs text-cookie-cocoa/80 mt-0.5"></p>
+        </div>
+        <a
+          id="modalExternalLink"
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs sm:text-sm font-bold shadow-sm transition shrink-0"
+        >
+          <i class="fa-brands fa-youtube"></i>
+          <span>前往 YouTube 觀看</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       5. 核心邏輯腳本
+  ====================================================================== -->
+  <script>
+    const PREVIEW_VIDEOS_COUNT = 4;
+
+    let topicVideosMap = new Map();
+    let currentDetailTopicId = null;
+    let selectedDetailChannelId = "all";
+    let searchQuery = "";
+    let detailSortBy = "newest";
+
+    // 從影片標題與官方標籤萃取比對文字（轉小寫）
+    function getVideoSearchableText(video) {
+      const tagsStr = Array.isArray(video.tags) ? video.tags.join(" ") : "";
+      return `${video.title || ""} ${tagsStr}`.toLowerCase();
+    }
+
+    // 依 CONFIG 分類並套用單主題上限 30 部
+    function buildTopicVideosMap(rawVideos) {
+      const map = new Map();
+      const maxPerTopic = CONFIG.MAX_VIDEOS_PER_TOPIC || 30;
+
+      for (const topic of CONFIG.TOPICS) {
+        map.set(topic.id, []);
+      }
+
+      const allowedChannels = new Set(
+        (CONFIG.CHANNEL_IDS || []).map(id => id.trim()).filter(Boolean)
+      );
+
+      // 去除重複影片
+      const uniqueVideosMap = new Map();
+      for (const video of rawVideos) {
+        const vid = video.videoId || video.id;
+        if (!vid) continue;
+        if (allowedChannels.size > 0 && !allowedChannels.has(video.channelId)) continue;
+        if (!uniqueVideosMap.has(vid)) {
+          uniqueVideosMap.set(vid, { ...video, videoId: vid });
         }
       }
-    };
 
-    let allVideosData = [];
-    let currentView = { type: 'home', categoryKey: null };
-    let currentChannelFilter = 'all';
+      // 由新到舊排序
+      const sortedUniqueVideos = Array.from(uniqueVideosMap.values()).sort(
+        (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
+      );
 
-    // 初始化載入
-    async function loadYouTubeData() {
-      const loading = document.getElementById('loadingState');
-      const errorDiv = document.getElementById('errorState');
-      const container = document.getElementById('appContainer');
+      for (const video of sortedUniqueVideos) {
+        const searchableText = getVideoSearchableText(video);
 
-      loading.classList.remove('hidden');
-      errorDiv.classList.add('hidden');
-      container.classList.add('hidden');
+        for (const topic of CONFIG.TOPICS) {
+          const list = map.get(topic.id);
+          // 單個主題上限 30 部
+          if (list.length >= maxPerTopic) continue;
+
+          const isMatch = (topic.hiddenHashtags || []).some(ruleTag => {
+            const cleanTag = ruleTag.trim().toLowerCase();
+            if (!cleanTag) return false;
+            const noHashTag = cleanTag.startsWith("#") ? cleanTag.slice(1) : cleanTag;
+            return searchableText.includes(cleanTag) || searchableText.includes(noHashTag);
+          });
+
+          if (isMatch) {
+            list.push(video);
+          }
+        }
+      }
+
+      return map;
+    }
+
+    // 透過 GAS 後端抓取資料（已包含 15 分鐘快取與 Shorts 過濾）
+    async function refreshVideoData() {
+      const loadingEl = document.getElementById("loadingState");
+      const alertBox = document.getElementById("statusAlertBox");
+      const updateTimeEl = document.getElementById("updateTimeDisplay");
+
+      alertBox.classList.add("hidden");
+      const validChannels = (CONFIG.CHANNEL_IDS || []).map(id => id.trim()).filter(Boolean);
+
+      if (!CONFIG.GAS_URL || validChannels.length === 0) {
+        topicVideosMap = buildTopicVideosMap([]);
+        renderCurrentView();
+        return;
+      }
+
+      loadingEl.classList.remove("hidden");
+      document.getElementById("overviewContainer").classList.add("hidden");
+      document.getElementById("topicDetailContainer").classList.add("hidden");
 
       try {
-        const url = `${CONFIG.GAS_URL}?channels=${CONFIG.CHANNEL_IDS.join(',')}`;
+        const url = `${CONFIG.GAS_URL}?channels=${encodeURIComponent(validChannels.join(","))}`;
         const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`伺服器連線失敗 (HTTP ${response.status})`);
+        }
         const data = await response.json();
 
         if (data.error) {
           throw new Error(data.error);
         }
 
-        allVideosData = data.items || [];
-        allVideosData.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
-
-        // 顯示上次更新時間
         if (data.lastUpdated) {
-          document.getElementById('updateTimeDisplay').innerText = `上次更新時間：${data.lastUpdated}（會在 15 分鐘內更新）`;
+          updateTimeEl.innerHTML = `<i class="fa-regular fa-clock text-amber-400"></i><span>上次更新時間：${escapeHtml(data.lastUpdated)}（會在 15 分鐘內更新）</span>`;
         }
 
-        loading.classList.add('hidden');
-        container.classList.remove('hidden');
-        render();
-      } catch (err) {
-        loading.classList.add('hidden');
-        errorDiv.classList.remove('hidden');
-        document.getElementById('errorMessage').innerText = err.message || "連線或解析資料失敗";
+        topicVideosMap = buildTopicVideosMap(data.items || []);
+      } catch (error) {
+        console.error("影片資料載入錯誤：", error);
+        alertBox.className = "mb-6 rounded-2xl p-4 border border-red-300 bg-red-50 text-red-900 text-sm flex items-start gap-3";
+        alertBox.innerHTML = `
+          <i class="fa-solid fa-circle-exclamation text-red-600 mt-0.5 text-base"></i>
+          <div>
+            <p class="font-bold">目前無法連線讀取頻道影片</p>
+            <p class="text-xs text-red-700 mt-0.5">錯誤訊息：${escapeHtml(error.message)}</p>
+          </div>
+        `;
+        alertBox.classList.remove("hidden");
+        topicVideosMap = buildTopicVideosMap([]);
+      } finally {
+        loadingEl.classList.add("hidden");
+        renderCurrentView();
       }
     }
 
-    // 判斷影片是否符合該主題類別
-    function matchCategory(video, categoryKey) {
-      const configCat = CONFIG.CATEGORIES[categoryKey];
-      if (!configCat) return false;
-
-      const textToCheck = (video.title + ' ' + (video.tags ? video.tags.join(' ') : '')).toLowerCase();
-      return configCat.keywords.some(kw => textToCheck.includes(kw.toLowerCase()));
+    function openTopicDetail(topicId) {
+      currentDetailTopicId = topicId;
+      selectedDetailChannelId = "all";
+      detailSortBy = "newest";
+      document.getElementById("detailSortSelect").value = "newest";
+      window.location.hash = `topic-${topicId}`;
+      renderCurrentView();
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    // 畫面渲染派發
-    function render() {
-      const container = document.getElementById('appContainer');
-      const searchTerm = document.getElementById('globalSearch').value.trim().toLowerCase();
+    function backToOverview() {
+      currentDetailTopicId = null;
+      selectedDetailChannelId = "all";
+      if (window.location.hash) {
+        history.replaceState(null, "", window.location.pathname + window.location.search);
+      }
+      renderCurrentView();
+    }
 
-      if (searchTerm) {
-        renderGlobalSearch(searchTerm, container);
+    function renderCurrentView() {
+      const overviewEl = document.getElementById("overviewContainer");
+      const detailEl = document.getElementById("topicDetailContainer");
+
+      if (currentDetailTopicId) {
+        overviewEl.classList.add("hidden");
+        detailEl.classList.remove("hidden");
+        renderTopicDetailView(currentDetailTopicId);
+      } else {
+        detailEl.classList.add("hidden");
+        overviewEl.classList.remove("hidden");
+        renderOverviewSections();
+      }
+    }
+
+    function renderOverviewSections() {
+      const container = document.getElementById("overviewContainer");
+      const q = searchQuery.trim().toLowerCase();
+
+      container.innerHTML = CONFIG.TOPICS.map(topic => {
+        let videos = topicVideosMap.get(topic.id) || [];
+
+        if (q !== "") {
+          videos = videos.filter(
+            v =>
+              v.title.toLowerCase().includes(q) ||
+              v.channelTitle.toLowerCase().includes(q)
+          );
+        }
+
+        const previewVideos = videos.slice(0, PREVIEW_VIDEOS_COUNT);
+
+        const bodyHtml =
+          previewVideos.length > 0
+            ? `
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+                ${previewVideos.map(v => createVideoCardHtml(v)).join("")}
+              </div>
+            `
+            : `
+              <div class="py-8 px-4 rounded-2xl bg-amber-50/50 border border-dashed border-amber-200 text-center">
+                <p class="text-xs sm:text-sm font-semibold text-cookie-cocoa/75">
+                  ${
+                    q !== ""
+                      ? `「${escapeHtml(topic.name)}」中沒有符合「${escapeHtml(searchQuery)}」的影片`
+                      : `目前尚無影片`
+                  }
+                </p>
+              </div>
+            `;
+
+        return `
+          <section
+            id="section-${topic.id}"
+            class="bg-white rounded-3xl border border-amber-900/10 shadow-xs p-5 sm:p-6 transition hover:border-amber-300/80"
+          >
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 mb-5 border-b border-amber-100">
+              <div class="flex items-start sm:items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-xs">
+                  <i class="fa-solid ${topic.icon} text-base"></i>
+                </div>
+                <div>
+                  <div class="flex items-center gap-2.5 flex-wrap">
+                    <h2
+                      data-open-topic="${topic.id}"
+                      class="open-topic-trigger text-lg sm:text-xl font-black text-cookie-choco hover:text-amber-700 transition cursor-pointer"
+                    >
+                      ${escapeHtml(topic.name)}
+                    </h2>
+                    ${
+                      previewVideos.length > 0
+                        ? `<span class="text-[11px] font-medium text-cookie-cocoa/70">顯示最新 ${previewVideos.length} 部預覽（共 ${videos.length} 部）</span>`
+                        : ""
+                    }
+                  </div>
+                  <p class="text-xs text-cookie-cocoa/75 mt-0.5">
+                    ${escapeHtml(topic.description)}
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                data-open-topic="${topic.id}"
+                class="open-topic-trigger inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 active:bg-amber-600 text-amber-950 font-extrabold text-xs sm:text-sm shadow-xs transition cursor-pointer self-start sm:self-center shrink-0"
+              >
+                <span>查看全部</span>
+                <i class="fa-solid fa-arrow-right text-xs"></i>
+              </button>
+            </div>
+
+            ${bodyHtml}
+          </section>
+        `;
+      }).join("");
+
+      container.querySelectorAll(".open-topic-trigger").forEach(el => {
+        el.addEventListener("click", () => {
+          const tid = el.getAttribute("data-open-topic");
+          if (tid) openTopicDetail(tid);
+        });
+      });
+
+      bindVideoCardClickEvents(container);
+    }
+
+    function renderTopicDetailView(topicId) {
+      const topic = CONFIG.TOPICS.find(t => t.id === topicId);
+      if (!topic) {
+        backToOverview();
         return;
       }
 
-      if (currentView.type === 'home') {
-        renderHome(container);
-      } else if (currentView.type === 'category') {
-        renderCategoryDetail(currentView.categoryKey, container);
-      }
-    }
+      const rawTopicVideos = topicVideosMap.get(topic.id) || [];
 
-    // 首頁：7大遊戲主題上下並排預覽
-    function renderHome(container) {
-      let html = '';
-      for (const [key, cat] of Object.entries(CONFIG.CATEGORIES)) {
-        const catVideos = allVideosData.filter(v => matchCategory(v, key));
-        const previewVideos = catVideos.slice(0, 4);
+      document.getElementById("detailTopicTitle").textContent = topic.name;
+      document.getElementById("detailTopicDesc").textContent = topic.description;
+      document.getElementById("detailTopicIconBox").innerHTML = `<i class="fa-solid ${topic.icon} text-xl"></i>`;
 
-        html += `
-          <section class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 backdrop-blur-sm shadow-xl">
-            <div class="flex justify-between items-center mb-6">
-              <h2 class="text-xl font-bold tracking-wide flex items-center gap-3">
-                <span class="w-2.5 h-2.5 rounded-full bg-orange-500"></span>
-                ${cat.name}
-              </h2>
-              ${catVideos.length > 4 ? `
-                <button onclick="openCategory('${key}')" class="text-sm text-orange-400 hover:text-orange-300 font-medium flex items-center gap-1 transition-colors">
-                  查看全部 (${catVideos.length})
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                </button>
-              ` : ''}
-            </div>
-        `;
-
-        if (catVideos.length === 0) {
-          html += `<div class="text-slate-500 text-sm py-8 text-center bg-slate-950/40 rounded-xl border border-slate-800/50">目前尚無符合此主題的影片</div>`;
-        } else {
-          html += `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">`;
-          previewVideos.forEach(video => {
-            html += createVideoCardHTML(video);
+      const activeChannelMap = new Map();
+      for (const v of rawTopicVideos) {
+        if (!activeChannelMap.has(v.channelId)) {
+          activeChannelMap.set(v.channelId, {
+            channelId: v.channelId,
+            channelTitle: v.channelTitle,
+            channelAvatar: v.channelAvatar || "",
+            count: 0
           });
-          html += `</div>`;
         }
-
-        html += `</section>`;
+        activeChannelMap.get(v.channelId).count += 1;
       }
-      container.innerHTML = html;
-    }
+      const activeChannels = Array.from(activeChannelMap.values()).sort((a, b) => b.count - a.count);
 
-    // 單一主題完整檢視頁
-    function renderCategoryDetail(categoryKey, container) {
-      const cat = CONFIG.CATEGORIES[categoryKey];
-      let catVideos = allVideosData.filter(v => matchCategory(v, categoryKey));
-
-      const activeChannelsMap = new Map();
-      catVideos.forEach(v => {
-        if (!activeChannelsMap.has(v.channelId)) {
-          activeChannelsMap.set(v.channelId, v.channelTitle);
-        }
-      });
-
-      if (currentChannelFilter !== 'all') {
-        catVideos = catVideos.filter(v => v.channelId === currentChannelFilter);
+      if (selectedDetailChannelId !== "all" && !activeChannelMap.has(selectedDetailChannelId)) {
+        selectedDetailChannelId = "all";
       }
 
-      let html = `
-        <div class="space-y-6">
-          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-900 border border-slate-800 rounded-2xl p-6">
-            <div>
-              <button onclick="goHome()" class="text-xs text-orange-400 hover:underline mb-2 flex items-center gap-1 font-medium">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                返回首頁總覽
-              </button>
-              <h2 class="text-2xl font-black">${cat.name} 完整攻略清單</h2>
-            </div>
-            
-            <div class="flex flex-wrap gap-2">
-              <button onclick="filterChannel('all')" class="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${currentChannelFilter === 'all' ? 'bg-orange-600 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}">
-                全部頻道
-              </button>
-      `;
+      document.getElementById("detailChannelCountText").textContent = `共 ${activeChannels.length} 個頻道有影片`;
 
-      activeChannelsMap.forEach((title, id) => {
-        const isActive = currentChannelFilter === id;
-        html += `
-          <button onclick="filterChannel('${id}')" class="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${isActive ? 'bg-orange-600 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}">
-            ${title}
+      const channelsListEl = document.getElementById("detailChannelsList");
+      const footerChannelsEl = document.getElementById("detailFooterChannelLinks");
+
+      if (activeChannels.length === 0) {
+        channelsListEl.innerHTML = `<span class="text-xs text-cookie-cocoa/60">目前尚無影片</span>`;
+        footerChannelsEl.innerHTML = "";
+      } else {
+        const allChipHtml = `
+          <button
+            type="button"
+            data-filter-channel="all"
+            class="detail-channel-filter-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
+              selectedDetailChannelId === "all"
+                ? "bg-cookie-choco text-white shadow-xs"
+                : "bg-amber-50 hover:bg-amber-100 text-cookie-choco border border-amber-200"
+            }"
+          >
+            <span>全部頻道 (${rawTopicVideos.length})</span>
           </button>
         `;
-      });
 
-      html += `</div></div>`;
+        const channelChipsHtml = activeChannels
+          .map(ch => {
+            const isSelected = selectedDetailChannelId === ch.channelId;
+            const avatarHtml = ch.channelAvatar
+              ? `<img src="${escapeHtml(ch.channelAvatar)}" alt="" class="w-4 h-4 rounded-full object-cover shrink-0" onerror="this.style.display='none'" />`
+              : `<i class="fa-brands fa-youtube text-red-500 text-xs shrink-0"></i>`;
 
-      if (catVideos.length === 0) {
-        html += `<div class="text-slate-500 text-sm py-16 text-center bg-slate-900 rounded-2xl border border-slate-800">此頻道或主題目前沒有影片</div>`;
-      } else {
-        html += `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">`;
-        catVideos.forEach(video => {
-          html += createVideoCardHTML(video);
+            return `
+              <div class="inline-flex items-center rounded-xl border overflow-hidden ${
+                isSelected
+                  ? "border-cookie-choco bg-cookie-choco text-white shadow-xs"
+                  : "border-amber-200 bg-white text-cookie-choco"
+              }">
+                <button
+                  type="button"
+                  data-filter-channel="${escapeHtml(ch.channelId)}"
+                  class="detail-channel-filter-btn px-3 py-1.5 text-xs font-bold hover:opacity-90 transition cursor-pointer flex items-center gap-1.5"
+                  title="僅顯示此頻道的影片"
+                >
+                  ${avatarHtml}
+                  <span>${escapeHtml(ch.channelTitle)} (${ch.count})</span>
+                </button>
+                <a
+                  href="https://www.youtube.com/channel/${encodeURIComponent(ch.channelId)}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="前往「${escapeHtml(ch.channelTitle)}」YouTube 頻道搜尋"
+                  class="px-2.5 py-1.5 text-xs border-l ${
+                    isSelected
+                      ? "border-white/20 text-amber-300 hover:bg-white/10"
+                      : "border-amber-100 text-red-600 hover:bg-red-50"
+                  } transition"
+                >
+                  <i class="fa-solid fa-arrow-up-right-from-square text-[11px]"></i>
+                </a>
+              </div>
+            `;
+          })
+          .join("");
+
+        channelsListEl.innerHTML = allChipHtml + channelChipsHtml;
+
+        footerChannelsEl.innerHTML = activeChannels
+          .map(
+            ch => `
+              <a
+                href="https://www.youtube.com/channel/${encodeURIComponent(ch.channelId)}/videos"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-amber-100/70 text-cookie-choco border border-amber-300/80 text-xs font-bold shadow-2xs transition"
+              >
+                <i class="fa-brands fa-youtube text-red-600"></i>
+                <span>${escapeHtml(ch.channelTitle)}</span>
+                <i class="fa-solid fa-magnifying-glass text-[10px] text-amber-700"></i>
+              </a>
+            `
+          )
+          .join("");
+
+        channelsListEl.querySelectorAll(".detail-channel-filter-btn").forEach(btn => {
+          btn.addEventListener("click", () => {
+            selectedDetailChannelId = btn.getAttribute("data-filter-channel");
+            renderTopicDetailView(topicId);
+          });
         });
-        html += `</div>`;
       }
 
-      html += `
-        <div class="bg-slate-900/40 border border-slate-800 rounded-2xl p-8 text-center space-y-4 mt-12">
-          <p class="text-slate-400 text-sm font-medium">若您想要找尋更先前的影片 請至該頻道搜尋</p>
-          <div class="flex flex-wrap justify-center gap-3">
-      `;
+      let filtered = [...rawTopicVideos];
 
-      activeChannelsMap.forEach((title, id) => {
-        html += `
-          <a href="https://www.youtube.com/channel/${id}" target="_blank" rel="noopener noreferrer" class="bg-slate-800 hover:bg-slate-700 text-orange-400 hover:text-orange-300 px-4 py-2 rounded-xl text-xs font-medium transition-colors border border-slate-700 flex items-center gap-2">
-            <span>前往 ${title} 頻道</span>
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-          </a>
-        `;
-      });
-
-      html += `</div></div></div>`;
-      container.innerHTML = html;
-    }
-
-    // 全站搜尋檢視
-    function renderGlobalSearch(term, container) {
-      const results = allVideosData.filter(v => 
-        v.title.toLowerCase().includes(term) || v.channelTitle.toLowerCase().includes(term)
-      );
-
-      let html = `
-        <div class="space-y-6">
-          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex justify-between items-center">
-            <h2 class="text-xl font-bold">搜尋結果：「${term}」</h2>
-            <button onclick="clearSearch()" class="text-xs text-orange-400 hover:underline">清除搜尋</button>
-          </div>
-      `;
-
-      if (results.length === 0) {
-        html += `<div class="text-slate-500 text-sm py-16 text-center bg-slate-900 rounded-2xl border border-slate-800">找不到符合的影片</div>`;
-      } else {
-        html += `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">`;
-        results.forEach(video => {
-          html += createVideoCardHTML(video);
-        });
-        html += `</div>`;
+      if (selectedDetailChannelId !== "all") {
+        filtered = filtered.filter(v => v.channelId === selectedDetailChannelId);
       }
 
-      html += `</div>`;
-      container.innerHTML = html;
+      if (searchQuery.trim() !== "") {
+        const q = searchQuery.trim().toLowerCase();
+        filtered = filtered.filter(
+          v =>
+            v.title.toLowerCase().includes(q) ||
+            v.channelTitle.toLowerCase().includes(q)
+        );
+      }
+
+      filtered.sort((a, b) => {
+        if (detailSortBy === "newest") {
+          return new Date(b.publishedAt) - new Date(a.publishedAt);
+        } else if (detailSortBy === "oldest") {
+          return new Date(a.publishedAt) - new Date(b.publishedAt);
+        } else if (detailSortBy === "channel") {
+          return a.channelTitle.localeCompare(b.channelTitle, "zh-Hant");
+        }
+        return 0;
+      });
+
+      const gridEl = document.getElementById("detailVideoGrid");
+      const emptyEl = document.getElementById("detailEmptyState");
+
+      if (filtered.length === 0) {
+        gridEl.classList.add("hidden");
+        emptyEl.classList.remove("hidden");
+        return;
+      }
+
+      emptyEl.classList.add("hidden");
+      gridEl.classList.remove("hidden");
+      gridEl.innerHTML = filtered.map(v => createVideoCardHtml(v)).join("");
+      bindVideoCardClickEvents(gridEl);
     }
 
-    function createVideoCardHTML(video) {
-      const thumbUrl = video.thumbnails?.medium?.url || video.thumbnails?.default?.url || '';
-      const pubDate = new Date(video.publishedAt).toLocaleDateString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit' });
+    function createVideoCardHtml(video) {
+      const formattedDate = formatRelativeDate(video.publishedAt);
+      const durationBadge = video.duration
+        ? `<span class="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-black/80 text-white text-[11px] font-mono font-semibold backdrop-blur-xs">${escapeHtml(video.duration)}</span>`
+        : "";
+      const avatarHtml = video.channelAvatar
+        ? `<img src="${escapeHtml(video.channelAvatar)}" alt="" class="w-5 h-5 rounded-full object-cover shrink-0 border border-amber-200" onerror="this.style.display='none'" />`
+        : `<i class="fa-brands fa-youtube text-red-600 shrink-0"></i>`;
 
       return `
-        <div class="bg-slate-900 border border-slate-800/80 rounded-xl overflow-hidden hover:border-orange-500/50 transition-all duration-300 flex flex-col group shadow-md hover:shadow-orange-500/10">
-          <div class="relative aspect-video bg-slate-950 overflow-hidden cursor-pointer" onclick="openVideo('${video.id}')">
-            <img src="${thumbUrl}" alt="${escapeHtml(video.title)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
-            <div class="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors flex items-center justify-center">
-              <div class="w-10 h-10 rounded-full bg-orange-600/90 text-white flex items-center justify-center shadow-lg transform scale-90 group-hover:scale-110 transition-transform">
-                <svg class="w-5 h-5 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        <article
+          data-video-id="${escapeHtml(video.videoId)}"
+          class="video-card group bg-white rounded-2xl overflow-hidden border border-amber-900/10 shadow-2xs flex flex-col cursor-pointer"
+        >
+          <div class="relative aspect-video bg-stone-900 overflow-hidden">
+            <img
+              src="${escapeHtml(video.thumbnail)}"
+              alt="${escapeHtml(video.title)}"
+              loading="lazy"
+              onerror="this.onerror=null;this.src='https://placehold.co/640x360/3E2723/FDE68A?text=Devsisters+Guide';"
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 group-hover:opacity-95 transition"></div>
+
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="w-11 h-11 rounded-full bg-red-600/95 text-white flex items-center justify-center shadow-lg transform scale-90 opacity-90 group-hover:scale-105 group-hover:opacity-100 transition">
+                <i class="fa-solid fa-play text-sm ml-0.5"></i>
               </div>
             </div>
+
+            <span class="absolute bottom-2 left-2 px-2 py-0.5 rounded-md bg-black/70 text-amber-100 text-[11px] font-medium backdrop-blur-xs">
+              ${formattedDate}
+            </span>
+            ${durationBadge}
           </div>
-          <div class="p-4 flex flex-col flex-grow justify-between gap-3">
-            <div>
-              <h3 onclick="openVideo('${video.id}')" class="font-bold text-sm text-slate-100 hover:text-orange-400 line-clamp-2 cursor-pointer transition-colors leading-snug" title="${escapeHtml(video.title)}">
-                ${escapeHtml(video.title)}
-              </h3>
-            </div>
-            <div class="flex justify-between items-center text-xs text-slate-400 pt-2 border-t border-slate-800/80">
-              <a href="https://www.youtube.com/channel/${video.channelId}" target="_blank" rel="noopener noreferrer" class="hover:text-orange-400 truncate max-w-[60%] transition-colors">
-                ${escapeHtml(video.channelTitle)}
-              </a>
-              <span>${pubDate}</span>
+
+          <div class="p-3.5 sm:p-4 flex-1 flex flex-col justify-between">
+            <h3 class="font-bold text-sm text-cookie-choco line-clamp-2 group-hover:text-amber-700 transition leading-snug">
+              ${escapeHtml(video.title)}
+            </h3>
+
+            <div class="mt-3 pt-2.5 border-t border-stone-100 flex items-center justify-between text-xs text-cookie-cocoa/80">
+              <span class="inline-flex items-center gap-1.5 font-medium truncate">
+                ${avatarHtml}
+                <span class="truncate">${escapeHtml(video.channelTitle)}</span>
+              </span>
+              <span class="text-amber-700 font-bold shrink-0 ml-2 group-hover:translate-x-0.5 transition-transform">
+                觀看 <i class="fa-solid fa-chevron-right text-[10px]"></i>
+              </span>
             </div>
           </div>
-        </div>
+        </article>
       `;
     }
 
-    function openCategory(key) {
-      currentView = { type: 'category', categoryKey: key };
-      currentChannelFilter = 'all';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      render();
+    function bindVideoCardClickEvents(rootElement) {
+      rootElement.querySelectorAll(".video-card").forEach(card => {
+        card.addEventListener("click", () => {
+          const vid = card.getAttribute("data-video-id");
+          let foundVideo = null;
+          for (const list of topicVideosMap.values()) {
+            foundVideo = list.find(v => v.videoId === vid);
+            if (foundVideo) break;
+          }
+          if (foundVideo) {
+            openVideoModal(foundVideo);
+          }
+        });
+      });
     }
 
-    function goHome() {
-      currentView = { type: 'home', categoryKey: null };
-      currentChannelFilter = 'all';
-      document.getElementById('globalSearch').value = '';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      render();
+    function openVideoModal(video) {
+      const modal = document.getElementById("videoModal");
+      const iframe = document.getElementById("youtubeIframe");
+      const titleEl = document.getElementById("modalVideoTitle");
+      const channelEl = document.getElementById("modalChannelInfo");
+      const publishEl = document.getElementById("modalPublishInfo");
+      const extLink = document.getElementById("modalExternalLink");
+
+      titleEl.textContent = video.title;
+      channelEl.textContent = `頻道：${video.channelTitle}`;
+      publishEl.textContent = `發布時間：${new Date(video.publishedAt).toLocaleString("zh-TW", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+      })}`;
+      extLink.href = `https://www.youtube.com/watch?v=${encodeURIComponent(video.videoId)}`;
+      iframe.src = `https://www.youtube.com/embed/${encodeURIComponent(video.videoId)}?autoplay=1&rel=0`;
+
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+      document.body.style.overflow = "hidden";
     }
 
-    function filterChannel(channelId) {
-      currentChannelFilter = channelId;
-      render();
-    }
-
-    function handleSearch(val) {
-      render();
-    }
-
-    function clearSearch() {
-      document.getElementById('globalSearch').value = '';
-      render();
-    }
-
-    function openVideo(videoId) {
-      const modal = document.getElementById('videoModal');
-      const iframe = document.getElementById('modalIframe');
-      iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-      modal.classList.remove('hidden');
-    }
-
-    function closeModal(e) {
-      if (!e || e.target.id === 'videoModal' || e.target.closest('button')) {
-        const modal = document.getElementById('videoModal');
-        const iframe = document.getElementById('modalIframe');
-        iframe.src = '';
-        modal.classList.add('hidden');
-      }
+    function closeVideoModal() {
+      const modal = document.getElementById("videoModal");
+      const iframe = document.getElementById("youtubeIframe");
+      iframe.src = "";
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+      document.body.style.overflow = "";
     }
 
     function escapeHtml(str) {
-      return str.replace(/[&<>'"]/g, 
-        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
-      );
+      if (typeof str !== "string") return "";
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
     }
 
-    loadYouTubeData();
+    function formatRelativeDate(isoString) {
+      const date = new Date(isoString);
+      if (isNaN(date.getTime())) return "";
+      const now = new Date();
+      const diffMs = now - date;
+      const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+      const diffDays = Math.floor(diffHours / 24);
+
+      if (diffHours < 1) return "剛剛發布";
+      if (diffHours < 24) return `${diffHours} 小時前`;
+      if (diffDays < 7) return `${diffDays} 天前`;
+      return `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, "0")}/${String(
+        date.getDate()
+      ).padStart(2, "0")}`;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.location.hash.startsWith("#topic-")) {
+        const hashTopicId = window.location.hash.replace("#topic-", "");
+        if (CONFIG.TOPICS.some(t => t.id === hashTopicId)) {
+          currentDetailTopicId = hashTopicId;
+        }
+      }
+
+      document.getElementById("brandHomeBtn").addEventListener("click", backToOverview);
+      document.getElementById("headerTitleLink").addEventListener("click", e => {
+        e.preventDefault();
+        backToOverview();
+      });
+      document.getElementById("backToOverviewBtn").addEventListener("click", backToOverview);
+
+      const searchInput = document.getElementById("searchInput");
+      const clearSearchBtn = document.getElementById("clearSearchBtn");
+
+      searchInput.addEventListener("input", e => {
+        searchQuery = e.target.value;
+        clearSearchBtn.classList.toggle("hidden", searchQuery === "");
+        renderCurrentView();
+      });
+
+      clearSearchBtn.addEventListener("click", () => {
+        searchQuery = "";
+        searchInput.value = "";
+        clearSearchBtn.classList.add("hidden");
+        renderCurrentView();
+      });
+
+      document.getElementById("detailSortSelect").addEventListener("change", e => {
+        detailSortBy = e.target.value;
+        if (currentDetailTopicId) {
+          renderTopicDetailView(currentDetailTopicId);
+        }
+      });
+
+      document.getElementById("closeVideoModalBtn").addEventListener("click", closeVideoModal);
+      document.getElementById("videoModal").addEventListener("click", e => {
+        if (e.target.id === "videoModal") closeVideoModal();
+      });
+
+      window.addEventListener("hashchange", () => {
+        if (window.location.hash.startsWith("#topic-")) {
+          const hashTopicId = window.location.hash.replace("#topic-", "");
+          if (CONFIG.TOPICS.some(t => t.id === hashTopicId)) {
+            currentDetailTopicId = hashTopicId;
+            renderCurrentView();
+            return;
+          }
+        }
+        currentDetailTopicId = null;
+        renderCurrentView();
+      });
+
+      document.addEventListener("keydown", e => {
+        if (e.key === "Escape") {
+          closeVideoModal();
+        }
+      });
+
+      refreshVideoData();
+    });
   </script>
 </body>
 </html>
