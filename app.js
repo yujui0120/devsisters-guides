@@ -33,8 +33,10 @@ function buildTopicVideosMap(rawVideos) {
   );
 
   for (const video of sortedUniqueVideos) {
-    const tagsStr = Array.isArray(video.tags) ? video.tags.join(" ") : "";
-    const fullText = `${video.title || ""} ${tagsStr} ${video.description || ""}`.toLowerCase();
+    const titleText = (video.title || "").toLowerCase();
+    const descText = (video.description || "").toLowerCase();
+    const tagsList = Array.isArray(video.tags) ? video.tags.map(t => t.toLowerCase()) : [];
+    const tagsText = tagsList.join(" ");
 
     for (const topic of CONFIG.TOPICS) {
       const list = map.get(topic.id);
@@ -43,9 +45,15 @@ function buildTopicVideosMap(rawVideos) {
       const isMatch = (topic.hiddenHashtags || []).some(ruleTag => {
         const cleanRule = ruleTag.trim().toLowerCase();
         if (!cleanRule) return false;
+        
         const withoutHash = cleanRule.startsWith("#") ? cleanRule.slice(1) : cleanRule;
         const withHash = cleanRule.startsWith("#") ? cleanRule : `#${cleanRule}`;
-        return fullText.includes(withoutHash) || fullText.includes(withHash);
+
+        const matchTitle = titleText.includes(withoutHash) || titleText.includes(withHash);
+        const matchDesc = descText.includes(withoutHash) || descText.includes(withHash);
+        const matchTags = tagsList.some(t => t.includes(withoutHash) || t.includes(withHash)) || tagsText.includes(withoutHash) || tagsText.includes(withHash);
+
+        return matchTitle || matchDesc || matchTags;
       });
 
       if (isMatch) {
