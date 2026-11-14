@@ -26,7 +26,7 @@ const CONFIG = {
       name: "薑餅人王國",
       icon: "fa-crown",
       hiddenHashtags: [
-        "#王國",
+        "#薑餅人王國",
         "#CookieRunKingdom",
         "#Kingdom",
         "#CRK",
@@ -38,7 +38,7 @@ const CONFIG = {
       name: "薑餅人之塔",
       icon: "fa-chess-rook",
       hiddenHashtags: [
-        "#之塔",
+        "#薑餅人之塔",
         "#CookieRunTowerOfAdventures",
         "#TowerOfAdventures",
         "#CRTOA",
