@@ -16,6 +16,8 @@
           Devsisters 攻略影片集合
         </h1>
         <p class="text-xs text-slate-400 mt-0.5">匯集各大授權頻道的精選遊戲攻略與最新動態</p>
+        <!-- 更新時間顯示區塊 -->
+        <p id="updateTimeDisplay" class="text-[11px] text-slate-500 mt-1">上次更新時間：載入中...（會在 15 分鐘內更新）</p>
       </div>
       <div class="w-full sm:w-80">
         <input type="text" id="globalSearch" placeholder="搜尋全站影片標題..." oninput="handleSearch(this.value)" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:border-orange-500 transition-colors">
@@ -68,7 +70,7 @@
     // 設定區：頻道與 Hashtag 規則全在前端管理
     // ==========================================
     const CONFIG = {
-      GAS_URL: "https://script.google.com/macros/s/AKfycbz_unyIgEY2kiTxCtMdWG-1H--6sLqh5Py1yYqec65lZCl5qq1qK18pDrVMfUEzLOT-jA/exec",
+      GAS_URL: "https://script.google.com/macros/s/AKfycbz_unyIgEY2kiTxCtMdWG-1H--6sLqh5Py1yYqec65lZCl5qq1qK18pDrVMfUEzLOT-jA/exec", // 請替換成你的 GAS 網頁應用程式網址
 
       // 授權頻道清單
       CHANNEL_IDS: [
@@ -135,8 +137,12 @@
         }
 
         allVideosData = data.items || [];
-        // 依發布日期由新到舊排序
         allVideosData.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+
+        // 顯示上次更新時間
+        if (data.lastUpdated) {
+          document.getElementById('updateTimeDisplay').innerText = `上次更新時間：${data.lastUpdated}（會在 15 分鐘內更新）`;
+        }
 
         loading.classList.add('hidden');
         container.classList.remove('hidden');
@@ -162,7 +168,6 @@
       const container = document.getElementById('appContainer');
       const searchTerm = document.getElementById('globalSearch').value.trim().toLowerCase();
 
-      // 如果全站搜尋框有輸入字串，直接顯示全站搜尋結果
       if (searchTerm) {
         renderGlobalSearch(searchTerm, container);
         return;
@@ -218,7 +223,6 @@
       const cat = CONFIG.CATEGORIES[categoryKey];
       let catVideos = allVideosData.filter(v => matchCategory(v, categoryKey)).slice(0, 50);
 
-      // 收集該主題中所有有影片的頻道
       const activeChannelsMap = new Map();
       catVideos.forEach(v => {
         if (!activeChannelsMap.has(v.channelId)) {
@@ -226,7 +230,6 @@
         }
       });
 
-      // 頻道篩選
       if (currentChannelFilter !== 'all') {
         catVideos = catVideos.filter(v => v.channelId === currentChannelFilter);
       }
@@ -242,7 +245,6 @@
               <h2 class="text-2xl font-black">${cat.name} 完整攻略清單</h2>
             </div>
             
-            <!-- 頻道快速篩選按鈕 -->
             <div class="flex flex-wrap gap-2">
               <button onclick="filterChannel('all')" class="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${currentChannelFilter === 'all' ? 'bg-orange-600 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}">
                 全部頻道
@@ -270,7 +272,6 @@
         html += `</div>`;
       }
 
-      // 底部搜尋提示與頻道連結
       html += `
         <div class="bg-slate-900/40 border border-slate-800 rounded-2xl p-8 text-center space-y-4 mt-12">
           <p class="text-slate-400 text-sm font-medium">若您想要找尋更先前的影片 請至該頻道搜尋</p>
@@ -318,7 +319,6 @@
       container.innerHTML = html;
     }
 
-    // 共用影片卡片 HTML
     function createVideoCardHTML(video) {
       const thumbUrl = video.thumbnails?.medium?.url || video.thumbnails?.default?.url || '';
       const pubDate = new Date(video.publishedAt).toLocaleDateString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit' });
@@ -350,7 +350,6 @@
       `;
     }
 
-    // 互動控制函式
     function openCategory(key) {
       currentView = { type: 'category', categoryKey: key };
       currentChannelFilter = 'all';
@@ -402,7 +401,6 @@
       );
     }
 
-    // 頁面載入時執行
     loadYouTubeData();
   </script>
 </body>
