@@ -5,6 +5,7 @@ let currentDetailTopicId = null;
 let selectedDetailChannelId = "all";
 let searchQuery = "";
 let detailSortBy = "newest";
+let currentModalVideoUrl = "";
 
 if (window.IS_MAINTENANCE) {
   throw new Error("System is under maintenance.");
@@ -12,7 +13,7 @@ if (window.IS_MAINTENANCE) {
 
 function buildTopicVideosMap(rawVideos) {
   const map = new Map();
-  const maxPerTopic = CONFIG.MAX_VIDEOS_PER_TOPIC || 30;
+  const maxPerTopic = CONFIG.MAX_VIDEOS_PER_TOPIC || 50;
 
   for (const topic of CONFIG.TOPICS) {
     map.set(topic.id, []);
@@ -37,7 +38,6 @@ function buildTopicVideosMap(rawVideos) {
   );
 
   for (const video of sortedUniqueVideos) {
-    // 同時從標題與完整內文中偵測關鍵字
     const fullText = `${video.title || ""} ${video.description || ""}`.toLowerCase();
 
     for (const topic of CONFIG.TOPICS) {
@@ -478,6 +478,8 @@ function openVideoModal(video) {
   const publishEl = document.getElementById("modalPublishInfo");
   const extLink = document.getElementById("modalExternalLink");
 
+  currentModalVideoUrl = `https://www.youtube.com/watch?v=${video.videoId}`;
+
   titleEl.textContent = video.title;
   channelEl.textContent = `頻道：${video.channelTitle}`;
   publishEl.textContent = `發布時間：${new Date(video.publishedAt).toLocaleString("zh-TW", {
@@ -487,13 +489,29 @@ function openVideoModal(video) {
     hour: "2-digit",
     minute: "2-digit"
   })}`;
-  extLink.href = `https://www.youtube.com/watch?v=${encodeURIComponent(video.videoId)}`;
+  extLink.href = currentModalVideoUrl;
   iframe.src = `https://www.youtube.com/embed/${encodeURIComponent(video.videoId)}?autoplay=1&rel=0`;
 
   modal.classList.remove("hidden");
   modal.classList.add("flex");
   document.body.style.overflow = "hidden";
 }
+
+document.getElementById("copyLinkBtn").addEventListener("click", () => {
+  if (!currentModalVideoUrl) return;
+  
+  navigator.clipboard.writeText(currentModalVideoUrl).then(() => {
+    const btnText = document.getElementById("copyBtnText");
+    const originalText = btnText.textContent;
+    btnText.textContent = "已複製！";
+    
+    setTimeout(() => {
+      btnText.textContent = originalText;
+    }, 2000);
+  }).catch(err => {
+    console.error("複製失敗：", err);
+  });
+});
 
 function closeVideoModal() {
   const modal = document.getElementById("videoModal");
