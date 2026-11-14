@@ -39,7 +39,6 @@ const CONFIG = {
       icon: "fa-chess-rook",
       hiddenHashtags: [
         "#薑餅人之塔",
-        "#之塔",
         "#CookieRunTowerOfAdventures",
         "#TowerOfAdventures",
         "#CRTOA",
