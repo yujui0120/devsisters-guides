@@ -6,6 +6,10 @@ let selectedDetailChannelId = "all";
 let searchQuery = "";
 let detailSortBy = "newest";
 
+if (window.IS_MAINTENANCE) {
+  throw new Error("System is under maintenance.");
+}
+
 function buildTopicVideosMap(rawVideos) {
   const map = new Map();
   const maxPerTopic = CONFIG.MAX_VIDEOS_PER_TOPIC || 30;
