@@ -5,7 +5,8 @@ const CONFIG = {
     "UCT7W2GVaHtBuTu3kZJB0GwQ", //官方
     "UCU9oAVsg-RghFBApVBjVn5A", //M神
     "UC4O0Bsolr3brLF1jdo9v-jg", //碰碰林
-    "UCG0QOZXtIAKYKUqzJbX45Fw" //香香
+    "UCG0QOZXtIAKYKUqzJbX45Fw", //香香
+    ""
   ],
   TOPICS: [
     {
