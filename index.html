@@ -67,10 +67,10 @@
 
   <script>
     // ==========================================
-    // 設定區：頻道與 Hashtag 規則全在前端管理
+    // 設定區：頻道與分類關鍵字規則
     // ==========================================
     const CONFIG = {
-      GAS_URL: "https://script.google.com/macros/s/AKfycbz_unyIgEY2kiTxCtMdWG-1H--6sLqh5Py1yYqec65lZCl5qq1qK18pDrVMfUEzLOT-jA/exec", // 請替換成你的 GAS 網頁應用程式網址
+      GAS_URL: "https://script.google.com/macros/s/AKfycbz_unyIgEY2kiTxCtMdWG-1H--6sLqh5Py1yYqec65lZCl5qq1qK18pDrVMfUEzLOT-jA/exec",
 
       // 授權頻道清單
       CHANNEL_IDS: [
@@ -80,35 +80,35 @@
         "UCG0QOZXtIAKYKUqzJbX45Fw"
       ],
 
-      // 各主題與隱藏 Hashtag 規則
+      // 各主題遊戲分類與精準關鍵字
       CATEGORIES: {
         cookieRun: {
-          name: "跑跑薑餅人",
-          hiddenHashtags: ["#跑跑薑餅人", "#跑跑", "#CookieRun", "#烤箱大逃亡"]
+          name: "跑跑薑餅人 (烤箱大逃亡)",
+          keywords: ["烤箱大逃亡", "ovenbreak", "cookierunovenbreak"]
         },
         kingdom: {
           name: "薑餅人王國",
-          hiddenHashtags: ["#薑餅人王國", "#王國", "#CookieRunKingdom"]
+          keywords: ["薑餅人王國", "王國", "cookierunkingdom", "kingdom"]
         },
         tower: {
           name: "薑餅人之塔",
-          hiddenHashtags: ["#薑餅人之塔", "#CookieRunTowerOfAdventures"]
+          keywords: ["薑餅人之塔", "之塔", "towerofadventures", "toa"]
         },
         witchCastle: {
           name: "薑餅人魔女之城",
-          hiddenHashtags: ["#薑餅人魔女之城", "#魔女之城", "#CookieRunWitchCastle"]
+          keywords: ["魔女之城", "witchcastle"]
         },
         classic: {
           name: "薑餅人經典版",
-          hiddenHashtags: ["#薑餅人經典版", "#經典版"]
+          keywords: ["經典版", "classic"]
         },
         brawl: {
           name: "薑餅人大亂鬥",
-          hiddenHashtags: ["#薑餅人大亂鬥", "#大亂鬥"]
+          keywords: ["大亂鬥", "brawl"]
         },
         idleWar: {
           name: "薑餅人放置大戰爭",
-          hiddenHashtags: ["#薑餅人放置大戰爭", "#放置大戰爭"]
+          keywords: ["放置大戰爭", "idle"]
         }
       }
     };
@@ -154,13 +154,13 @@
       }
     }
 
-    // 判斷影片是否符合該主題的隱藏 Hashtag
+    // 判斷影片是否符合該主題類別
     function matchCategory(video, categoryKey) {
       const configCat = CONFIG.CATEGORIES[categoryKey];
       if (!configCat) return false;
 
-      const textToCheck = (video.title + ' ' + video.description + ' ' + (video.tags ? video.tags.join(' ') : '')).toLowerCase();
-      return configCat.hiddenHashtags.some(tag => textToCheck.includes(tag.toLowerCase()));
+      const textToCheck = (video.title + ' ' + (video.tags ? video.tags.join(' ') : '')).toLowerCase();
+      return configCat.keywords.some(kw => textToCheck.includes(kw.toLowerCase()));
     }
 
     // 畫面渲染派發
@@ -218,10 +218,10 @@
       container.innerHTML = html;
     }
 
-    // 單一主題完整檢視頁（最多 50 部）
+    // 單一主題完整檢視頁
     function renderCategoryDetail(categoryKey, container) {
       const cat = CONFIG.CATEGORIES[categoryKey];
-      let catVideos = allVideosData.filter(v => matchCategory(v, categoryKey)).slice(0, 50);
+      let catVideos = allVideosData.filter(v => matchCategory(v, categoryKey));
 
       const activeChannelsMap = new Map();
       catVideos.forEach(v => {
