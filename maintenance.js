@@ -4,7 +4,7 @@
   }
 
   const startTime = new Date("2020-01-01T00:00:00+08:00");
-  const endTime = new Date("2027-11-15T21:00:00+08:00");
+  const endTime = new Date("2020-11-15T21:00:00+08:00");
   const now = new Date();
   
 //系統維護中
