@@ -6,13 +6,9 @@ let selectedDetailChannelId = "all";
 let searchQuery = "";
 let detailSortBy = "newest";
 
-if (window.IS_MAINTENANCE) {
-  throw new Error("System is under maintenance.");
-}
-
 function buildTopicVideosMap(rawVideos) {
   const map = new Map();
-  const maxPerTopic = CONFIG.MAX_VIDEOS_PER_TOPIC || 30;
+  const maxPerTopic = 30;
 
   for (const topic of CONFIG.TOPICS) {
     map.set(topic.id, []);
@@ -47,9 +43,7 @@ function buildTopicVideosMap(rawVideos) {
       const isMatch = (topic.hiddenHashtags || []).some(ruleTag => {
         const cleanRule = ruleTag.trim().toLowerCase();
         if (!cleanRule) return false;
-        const withHash = cleanRule.startsWith("#") ? cleanRule : `#${cleanRule}`;
-        const withoutHash = cleanRule.startsWith("#") ? cleanRule.slice(1) : cleanRule;
-        return fullText.includes(withHash) || fullText.includes(withoutHash);
+        return fullText.includes(cleanRule);
       });
 
       if (isMatch) {
