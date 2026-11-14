@@ -27,7 +27,6 @@ const CONFIG = {
       icon: "fa-crown",
       hiddenHashtags: [
         "#薑餅人王國",
-        "#王國",
         "#CookieRunKingdom",
         "#Kingdom",
         "#CRK",
@@ -83,7 +82,6 @@ const CONFIG = {
         "#大亂鬥",
         "#CookieRunOvenSmash",
         "#OvenSmash",
-        "#Brawl",
         "#오븐스매시"
       ]
     },
@@ -94,7 +92,6 @@ const CONFIG = {
       hiddenHashtags: [
         "#薑餅人放置大戰爭",
         "#CookieRunIdle",
-        "#薑餅人放置",
         "#放置大戰爭"
       ]
     }
