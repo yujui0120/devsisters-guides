@@ -6,9 +6,13 @@ let selectedDetailChannelId = "all";
 let searchQuery = "";
 let detailSortBy = "newest";
 
+if (window.IS_MAINTENANCE) {
+  throw new Error("System is under maintenance.");
+}
+
 function buildTopicVideosMap(rawVideos) {
   const map = new Map();
-  const maxPerTopic = 30;
+  const maxPerTopic = CONFIG.MAX_VIDEOS_PER_TOPIC || 30;
 
   for (const topic of CONFIG.TOPICS) {
     map.set(topic.id, []);
@@ -33,10 +37,8 @@ function buildTopicVideosMap(rawVideos) {
   );
 
   for (const video of sortedUniqueVideos) {
-    const titleText = (video.title || "").toLowerCase();
-    const descText = (video.description || "").toLowerCase();
-    const tagsList = Array.isArray(video.tags) ? video.tags.map(t => t.toLowerCase()) : [];
-    const tagsText = tagsList.join(" ");
+    const tagsStr = Array.isArray(video.tags) ? video.tags.join(" ") : "";
+    const fullText = `${video.title || ""} ${tagsStr}`.toLowerCase();
 
     for (const topic of CONFIG.TOPICS) {
       const list = map.get(topic.id);
@@ -45,15 +47,9 @@ function buildTopicVideosMap(rawVideos) {
       const isMatch = (topic.hiddenHashtags || []).some(ruleTag => {
         const cleanRule = ruleTag.trim().toLowerCase();
         if (!cleanRule) return false;
-        
         const withoutHash = cleanRule.startsWith("#") ? cleanRule.slice(1) : cleanRule;
         const withHash = cleanRule.startsWith("#") ? cleanRule : `#${cleanRule}`;
-
-        const matchTitle = titleText.includes(withoutHash) || titleText.includes(withHash);
-        const matchDesc = descText.includes(withoutHash) || descText.includes(withHash);
-        const matchTags = tagsList.some(t => t.includes(withoutHash) || t.includes(withHash)) || tagsText.includes(withoutHash) || tagsText.includes(withHash);
-
-        return matchTitle || matchDesc || matchTags;
+        return fullText.includes(withoutHash) || fullText.includes(withHash);
       });
 
       if (isMatch) {
