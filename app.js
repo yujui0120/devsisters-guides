@@ -168,7 +168,7 @@ function renderOverviewSections() {
         `
         : `
           <div class="py-8 px-4 rounded-2xl bg-amber-50/50 border border-dashed border-amber-200 text-center">
-            <p class="text-xs sm:text-sm font-semibold text-cookie-cocoa/75">
+            <p class="text-xs sm:text-sm font-semibold text-[#5D4037]">
               ${
                 q !== ""
                   ? `「${escapeHtml(topic.name)}」中沒有符合「${escapeHtml(searchQuery)}」的影片`
@@ -191,13 +191,13 @@ function renderOverviewSections() {
             <div class="flex items-center gap-2.5 flex-wrap">
               <h2
                 data-open-topic="${topic.id}"
-                class="open-topic-trigger text-lg sm:text-xl font-black text-cookie-choco hover:text-amber-700 transition cursor-pointer"
+                class="open-topic-trigger text-lg sm:text-xl font-black text-[#3E2723] hover:text-amber-700 transition cursor-pointer"
               >
                 ${escapeHtml(topic.name)}
               </h2>
               ${
                 previewVideos.length > 0
-                  ? `<span class="text-[11px] font-medium text-cookie-cocoa/70">顯示最新 ${previewVideos.length} 部預覽（共 ${videos.length} 部）</span>`
+                  ? `<span class="text-[11px] font-medium text-[#5D4037]/70">顯示最新 ${previewVideos.length} 部預覽（共 ${videos.length} 部）</span>`
                   : ""
               }
             </div>
@@ -264,17 +264,18 @@ function renderTopicDetailView(topicId) {
   const footerChannelsEl = document.getElementById("detailFooterChannelLinks");
 
   if (activeChannels.length === 0) {
-    channelsListEl.innerHTML = `<span class="text-xs text-cookie-cocoa/60">目前尚無影片</span>`;
+    channelsListEl.innerHTML = `<span class="text-xs text-[#5D4037]/60">目前尚無影片</span>`;
     footerChannelsEl.innerHTML = "";
   } else {
+    const isAllSelected = selectedDetailChannelId === "all";
     const allChipHtml = `
       <button
         type="button"
         data-filter-channel="all"
-        class="detail-channel-filter-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
-          selectedDetailChannelId === "all"
-            ? "bg-cookie-choco text-white shadow-xs"
-            : "bg-amber-50 hover:bg-amber-100 text-cookie-choco border border-amber-200"
+        class="detail-channel-filter-btn inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
+          isAllSelected
+            ? "bg-[#3E2723] text-white shadow-sm"
+            : "bg-amber-50 hover:bg-amber-100 text-[#3E2723] border border-amber-200"
         }"
       >
         <span>全部頻道 (${rawTopicVideos.length})</span>
@@ -291,13 +292,15 @@ function renderTopicDetailView(topicId) {
         return `
           <div class="inline-flex items-center rounded-xl border overflow-hidden ${
             isSelected
-              ? "border-cookie-choco bg-cookie-choco text-white shadow-xs"
-              : "border-amber-200 bg-white text-cookie-choco"
+              ? "border-[#3E2723] bg-[#3E2723] text-white shadow-sm"
+              : "border-amber-200 bg-white text-[#3E2723]"
           }">
             <button
               type="button"
               data-filter-channel="${escapeHtml(ch.channelId)}"
-              class="detail-channel-filter-btn px-3 py-1.5 text-xs font-bold hover:opacity-90 transition cursor-pointer flex items-center gap-1.5"
+              class="detail-channel-filter-btn px-3 py-2 text-xs font-bold hover:opacity-90 transition cursor-pointer flex items-center gap-1.5 ${
+                isSelected ? "text-white" : "text-[#3E2723]"
+              }"
               title="僅顯示此頻道的影片"
             >
               ${avatarHtml}
@@ -308,11 +311,11 @@ function renderTopicDetailView(topicId) {
               target="_blank"
               rel="noopener noreferrer"
               title="前往「${escapeHtml(ch.channelTitle)}」YouTube 頻道搜尋"
-              class="px-2.5 py-1.5 text-xs border-l ${
+              class="px-2.5 py-2 text-xs border-l ${
                 isSelected
                   ? "border-white/20 text-amber-300 hover:bg-white/10"
                   : "border-amber-100 text-red-600 hover:bg-red-50"
-              } transition"
+              } transition flex items-center justify-center"
             >
               <i class="fa-solid fa-arrow-up-right-from-square text-[11px]"></i>
             </a>
@@ -330,7 +333,7 @@ function renderTopicDetailView(topicId) {
             href="https://www.youtube.com/channel/${encodeURIComponent(ch.channelId)}/videos"
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-amber-100/70 text-cookie-choco border border-amber-300/80 text-xs font-bold shadow-2xs transition"
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-amber-100/70 text-[#3E2723] border border-amber-300/80 text-xs font-bold shadow-2xs transition"
           >
             <i class="fa-brands fa-youtube text-red-600"></i>
             <span>${escapeHtml(ch.channelTitle)}</span>
@@ -426,11 +429,11 @@ function createVideoCardHtml(video) {
       </div>
 
       <div class="p-3.5 sm:p-4 flex-1 flex flex-col justify-between">
-        <h3 class="font-bold text-sm text-cookie-choco line-clamp-2 group-hover:text-amber-700 transition leading-snug">
+        <h3 class="font-bold text-sm text-[#3E2723] line-clamp-2 group-hover:text-amber-700 transition leading-snug">
           ${escapeHtml(video.title)}
         </h3>
 
-        <div class="mt-3 pt-2.5 border-t border-stone-100 flex items-center justify-between text-xs text-cookie-cocoa/80">
+        <div class="mt-3 pt-2.5 border-t border-stone-100 flex items-center justify-between text-xs text-[#5D4037]/80">
           <span class="inline-flex items-center gap-1.5 font-medium truncate">
             ${avatarHtml}
             <span class="truncate">${escapeHtml(video.channelTitle)}</span>
