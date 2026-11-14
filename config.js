@@ -39,7 +39,6 @@ const CONFIG = {
       icon: "fa-chess-rook",
       keywords: [
         "薑餅人之塔",
-        "之塔",
         "CookieRunTowerOfAdventures",
         "TowerOfAdventures",
         "CRTOA",
