@@ -17,7 +17,7 @@
               為了提供更優質的服務，系統目前正在進行維護作業。<br>期間將暫時無法進入與使用各項功能，造成您的不便敬請見諒！
             </p>
             <div style="background-color: #FFFBEB; border: 1px solid #FDE68A; border-radius: 1rem; padding: 1rem; font-size: 0.875rem; font-weight: 700; color: #92400E;">
-              預計結束時間：2026/11/17 15:00 (GMT+8)
+              預計結束時間：未定 (GMT+8)
             </div>
           </div>
         </div>
