@@ -6,28 +6,6 @@ let selectedDetailChannelId = "all";
 let searchQuery = "";
 let detailSortBy = "newest";
 
-function getVideoTagsSet(video) {
-  const tagsSet = new Set();
-  if (Array.isArray(video.tags)) {
-    video.tags.forEach(t => {
-      if (t) {
-        const cleaned = t.trim().toLowerCase();
-        tagsSet.add(cleaned);
-        tagsSet.add(cleaned.startsWith("#") ? cleaned : `#${cleaned}`);
-      }
-    });
-  }
-  if (video.title) {
-    const matches = video.title.match(/#[\w\u4e00-\u9fa5\u3130-\u318F\uAC00-\uD7AF]+/g) || [];
-    matches.forEach(m => {
-      const cleaned = m.trim().toLowerCase();
-      tagsSet.add(cleaned);
-      tagsSet.add(cleaned.startsWith("#") ? cleaned.slice(1) : cleaned);
-    });
-  }
-  return tagsSet;
-}
-
 function buildTopicVideosMap(rawVideos) {
   const map = new Map();
   const maxPerTopic = CONFIG.MAX_VIDEOS_PER_TOPIC || 30;
@@ -55,7 +33,8 @@ function buildTopicVideosMap(rawVideos) {
   );
 
   for (const video of sortedUniqueVideos) {
-    const videoTags = getVideoTagsSet(video);
+    const tagsStr = Array.isArray(video.tags) ? video.tags.join(" ") : "";
+    const fullText = `${video.title || ""} ${tagsStr} ${video.description || ""}`.toLowerCase();
 
     for (const topic of CONFIG.TOPICS) {
       const list = map.get(topic.id);
@@ -64,9 +43,7 @@ function buildTopicVideosMap(rawVideos) {
       const isMatch = (topic.hiddenHashtags || []).some(ruleTag => {
         const cleanRule = ruleTag.trim().toLowerCase();
         if (!cleanRule) return false;
-        const withHash = cleanRule.startsWith("#") ? cleanRule : `#${cleanRule}`;
-        const withoutHash = cleanRule.startsWith("#") ? cleanRule.slice(1) : cleanRule;
-        return videoTags.has(withHash) || videoTags.has(withoutHash);
+        return fullText.includes(cleanRule);
       });
 
       if (isMatch) {
