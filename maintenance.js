@@ -1,6 +1,6 @@
 (function() {
-  const startTime = new Date("2026-11-13T00:30:00+08:00");
-  const endTime = new Date("2026-11-14T15:37:00+08:00");
+  const startTime = new Date("2026-11-13T00:00:00+08:00");
+  const endTime = new Date("2026-11-13T15:00:00+08:00");
   const now = new Date();
 
   if (now >= startTime && now <= endTime) {
@@ -14,7 +14,7 @@
             </div>
             <h1 style="font-size: 1.5rem; font-weight: 900; margin-bottom: 0.75rem; color: #3E2723;">系統維護中</h1>
             <p style="font-size: 0.875rem; color: #5D4037; line-height: 1.5; margin-bottom: 1.5rem;">
-              為了提供更優質的服務，系統目前正在進行維護作業。<br>期間將暫時無法進入與使用各項功能，造成您的不便敬請見諒！
+              為了提供更優質的服務，系統目前正在進行維護作業。<br>期間將暫時無法進入與使用各項功能，造成您的不便敬請見諒！<br>維護時間結束後重新整理網頁即可進入。
             </p>
             <div style="background-color: #FFFBEB; border: 1px solid #FDE68A; border-radius: 1rem; padding: 1rem; font-size: 0.875rem; font-weight: 700; color: #92400E;">
               預計結束時間：未定 (GMT+8)
