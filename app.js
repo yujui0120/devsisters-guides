@@ -37,14 +37,15 @@ function buildTopicVideosMap(rawVideos) {
   );
 
   for (const video of sortedUniqueVideos) {
-    const tagsStr = Array.isArray(video.tags) ? video.tags.join(" ") : "";
-    const fullText = `${video.title || ""} ${tagsStr}`.toLowerCase();
+    // 完全只從標題中偵測
+    const fullText = (video.title || "").toLowerCase();
 
     for (const topic of CONFIG.TOPICS) {
       const list = map.get(topic.id);
       if (list.length >= maxPerTopic) continue;
 
-      const isMatch = (topic.hiddenHashtags || []).some(ruleTag => {
+      const ruleList = topic.keywords || topic.hiddenHashtags || [];
+      const isMatch = ruleList.some(ruleTag => {
         const cleanRule = ruleTag.trim().toLowerCase();
         if (!cleanRule) return false;
         const withoutHash = cleanRule.startsWith("#") ? cleanRule.slice(1) : cleanRule;
