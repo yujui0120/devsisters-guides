@@ -37,8 +37,8 @@ function buildTopicVideosMap(rawVideos) {
   );
 
   for (const video of sortedUniqueVideos) {
-    // 完全只從標題中偵測
-    const fullText = (video.title || "").toLowerCase();
+    // 同時從標題與完整內文中偵測關鍵字
+    const fullText = `${video.title || ""} ${video.description || ""}`.toLowerCase();
 
     for (const topic of CONFIG.TOPICS) {
       const list = map.get(topic.id);
