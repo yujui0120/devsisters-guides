@@ -6,55 +6,6 @@ let selectedDetailChannelId = "all";
 let searchQuery = "";
 let detailSortBy = "newest";
 
-function buildTopicVideosMap(rawVideos) {
-  const map = new Map();
-  const maxPerTopic = CONFIG.MAX_VIDEOS_PER_TOPIC || 30;
-
-  for (const topic of CONFIG.TOPICS) {
-    map.set(topic.id, []);
-  }
-
-  const allowedChannels = new Set(
-    (CONFIG.CHANNEL_IDS || []).map(id => id.trim()).filter(Boolean)
-  );
-
-  const uniqueVideosMap = new Map();
-  for (const video of rawVideos) {
-    const vid = video.videoId || video.id;
-    if (!vid) continue;
-    if (allowedChannels.size > 0 && !allowedChannels.has(video.channelId)) continue;
-    if (!uniqueVideosMap.has(vid)) {
-      uniqueVideosMap.set(vid, { ...video, videoId: vid });
-    }
-  }
-
-  const sortedUniqueVideos = Array.from(uniqueVideosMap.values()).sort(
-    (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
-  );
-
-  for (const video of sortedUniqueVideos) {
-    const tagsStr = Array.isArray(video.tags) ? video.tags.join(" ") : "";
-    const fullText = `${video.title || ""} ${tagsStr} ${video.description || ""}`.toLowerCase();
-
-    for (const topic of CONFIG.TOPICS) {
-      const list = map.get(topic.id);
-      if (list.length >= maxPerTopic) continue;
-
-      const isMatch = (topic.hiddenHashtags || []).some(ruleTag => {
-        const cleanRule = ruleTag.trim().toLowerCase();
-        if (!cleanRule) return false;
-        return fullText.includes(cleanRule);
-      });
-
-      if (isMatch) {
-        list.push(video);
-      }
-    }
-  }
-
-  return map;
-}
-
 async function refreshVideoData() {
   const loadingEl = document.getElementById("loadingState");
   const alertBox = document.getElementById("statusAlertBox");
@@ -64,7 +15,8 @@ async function refreshVideoData() {
   const validChannels = (CONFIG.CHANNEL_IDS || []).map(id => id.trim()).filter(Boolean);
 
   if (!CONFIG.GAS_URL || validChannels.length === 0) {
-    topicVideosMap = buildTopicVideosMap([]);
+    topicVideosMap = new Map();
+    CONFIG.TOPICS.forEach(t => topicVideosMap.set(t.id, []));
     renderCurrentView();
     return;
   }
@@ -89,7 +41,12 @@ async function refreshVideoData() {
       updateTimeEl.innerHTML = `<i class="fa-regular fa-clock text-amber-400"></i><span>上次更新時間：${escapeHtml(data.lastUpdated)}（每15分鐘更新一次）</span>`;
     }
 
-    topicVideosMap = buildTopicVideosMap(data.items || []);
+    topicVideosMap = new Map();
+    if (data.topics) {
+      for (const [topicId, vList] of Object.entries(data.topics)) {
+        topicVideosMap.set(topicId, vList);
+      }
+    }
   } catch (error) {
     console.error("影片資料載入錯誤：", error);
     alertBox.className = "mb-6 rounded-2xl p-4 border border-red-300 bg-red-50 text-red-900 text-sm flex items-start gap-3";
@@ -101,7 +58,8 @@ async function refreshVideoData() {
       </div>
     `;
     alertBox.classList.remove("hidden");
-    topicVideosMap = buildTopicVideosMap([]);
+    topicVideosMap = new Map();
+    CONFIG.TOPICS.forEach(t => topicVideosMap.set(t.id, []));
   } finally {
     loadingEl.classList.add("hidden");
     renderCurrentView();
@@ -523,6 +481,60 @@ function formatRelativeDate(isoString) {
   ).padStart(2, "0")}`;
 }
 
+document.getElementById("brandHomeBtn").addEventListener("click", backToOverview);
+document.getElementById("headerTitleLink").addEventListener("click", e => {
+  e.preventDefault();
+  backToOverview();
+});
+document.getElementById("backToOverviewBtn").addEventListener("click", backToOverview);
+
+const searchInput = document.getElementById("searchInput");
+const clearSearchBtn = document.getElementById("clearSearchBtn");
+
+searchInput.addEventListener("input", e => {
+  searchQuery = e.target.value;
+  clearSearchBtn.classList.toggle("hidden", searchQuery === "");
+  renderCurrentView();
+});
+
+clearSearchBtn.addEventListener("click", () => {
+  searchQuery = "";
+  searchInput.value = "";
+  clearSearchBtn.classList.add("hidden");
+  renderCurrentView();
+});
+
+document.getElementById("detailSortSelect").addEventListener("change", e => {
+  detailSortBy = e.target.value;
+  if (currentDetailTopicId) {
+    renderTopicDetailView(currentDetailTopicId);
+  }
+});
+
+document.getElementById("closeVideoModalBtn").addEventListener("click", closeVideoModal);
+document.getElementById("videoModal").addEventListener("click", e => {
+  if (e.target.id === "videoModal") closeVideoModal();
+});
+
+window.addEventListener("hashchange", () => {
+  if (window.location.hash.startsWith("#topic-")) {
+    const hashTopicId = window.location.hash.replace("#topic-", "");
+    if (CONFIG.TOPICS.some(t => t.id === hashTopicId)) {
+      currentDetailTopicId = hashTopicId;
+      renderCurrentView();
+      return;
+    }
+  }
+  currentDetailTopicId = null;
+  renderCurrentView();
+});
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") {
+    closeVideoModal();
+  }
+});
+
 document.addEventListener("DOMContentLoaded", () => {
   if (window.location.hash.startsWith("#topic-")) {
     const hashTopicId = window.location.hash.replace("#topic-", "");
@@ -530,60 +542,5 @@ document.addEventListener("DOMContentLoaded", () => {
       currentDetailTopicId = hashTopicId;
     }
   }
-
-  document.getElementById("brandHomeBtn").addEventListener("click", backToOverview);
-  document.getElementById("headerTitleLink").addEventListener("click", e => {
-    e.preventDefault();
-    backToOverview();
-  });
-  document.getElementById("backToOverviewBtn").addEventListener("click", backToOverview);
-
-  const searchInput = document.getElementById("searchInput");
-  const clearSearchBtn = document.getElementById("clearSearchBtn");
-
-  searchInput.addEventListener("input", e => {
-    searchQuery = e.target.value;
-    clearSearchBtn.classList.toggle("hidden", searchQuery === "");
-    renderCurrentView();
-  });
-
-  clearSearchBtn.addEventListener("click", () => {
-    searchQuery = "";
-    searchInput.value = "";
-    clearSearchBtn.classList.add("hidden");
-    renderCurrentView();
-  });
-
-  document.getElementById("detailSortSelect").addEventListener("change", e => {
-    detailSortBy = e.target.value;
-    if (currentDetailTopicId) {
-      renderTopicDetailView(currentDetailTopicId);
-    }
-  });
-
-  document.getElementById("closeVideoModalBtn").addEventListener("click", closeVideoModal);
-  document.getElementById("videoModal").addEventListener("click", e => {
-    if (e.target.id === "videoModal") closeVideoModal();
-  });
-
-  window.addEventListener("hashchange", () => {
-    if (window.location.hash.startsWith("#topic-")) {
-      const hashTopicId = window.location.hash.replace("#topic-", "");
-      if (CONFIG.TOPICS.some(t => t.id === hashTopicId)) {
-        currentDetailTopicId = hashTopicId;
-        renderCurrentView();
-        return;
-      }
-    }
-    currentDetailTopicId = null;
-    renderCurrentView();
-  });
-
-  document.addEventListener("keydown", e => {
-    if (e.key === "Escape") {
-      closeVideoModal();
-    }
-  });
-
   refreshVideoData();
 });
