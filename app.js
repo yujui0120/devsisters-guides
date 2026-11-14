@@ -6,6 +6,57 @@ let selectedDetailChannelId = "all";
 let searchQuery = "";
 let detailSortBy = "newest";
 
+function buildTopicVideosMap(rawVideos) {
+  const map = new Map();
+  const maxPerTopic = CONFIG.MAX_VIDEOS_PER_TOPIC || 30;
+
+  for (const topic of CONFIG.TOPICS) {
+    map.set(topic.id, []);
+  }
+
+  const allowedChannels = new Set(
+    (CONFIG.CHANNEL_IDS || []).map(id => id.trim()).filter(Boolean)
+  );
+
+  const uniqueVideosMap = new Map();
+  for (const video of rawVideos) {
+    const vid = video.videoId || video.id;
+    if (!vid) continue;
+    if (allowedChannels.size > 0 && !allowedChannels.has(video.channelId)) continue;
+    if (!uniqueVideosMap.has(vid)) {
+      uniqueVideosMap.set(vid, { ...video, videoId: vid });
+    }
+  }
+
+  const sortedUniqueVideos = Array.from(uniqueVideosMap.values()).sort(
+    (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
+  );
+
+  for (const video of sortedUniqueVideos) {
+    const tagsStr = Array.isArray(video.tags) ? video.tags.join(" ") : "";
+    const fullText = `${video.title || ""} ${tagsStr} ${video.description || ""}`.toLowerCase();
+
+    for (const topic of CONFIG.TOPICS) {
+      const list = map.get(topic.id);
+      if (list.length >= maxPerTopic) continue;
+
+      const isMatch = (topic.hiddenHashtags || []).some(ruleTag => {
+        const cleanRule = ruleTag.trim().toLowerCase();
+        if (!cleanRule) return false;
+        const withHash = cleanRule.startsWith("#") ? cleanRule : `#${cleanRule}`;
+        const withoutHash = cleanRule.startsWith("#") ? cleanRule.slice(1) : cleanRule;
+        return fullText.includes(withHash) || fullText.includes(withoutHash);
+      });
+
+      if (isMatch) {
+        list.push(video);
+      }
+    }
+  }
+
+  return map;
+}
+
 async function refreshVideoData() {
   const loadingEl = document.getElementById("loadingState");
   const alertBox = document.getElementById("statusAlertBox");
@@ -15,8 +66,7 @@ async function refreshVideoData() {
   const validChannels = (CONFIG.CHANNEL_IDS || []).map(id => id.trim()).filter(Boolean);
 
   if (!CONFIG.GAS_URL || validChannels.length === 0) {
-    topicVideosMap = new Map();
-    CONFIG.TOPICS.forEach(t => topicVideosMap.set(t.id, []));
+    topicVideosMap = buildTopicVideosMap([]);
     renderCurrentView();
     return;
   }
@@ -41,12 +91,7 @@ async function refreshVideoData() {
       updateTimeEl.innerHTML = `<i class="fa-regular fa-clock text-amber-400"></i><span>上次更新時間：${escapeHtml(data.lastUpdated)}（每15分鐘更新一次）</span>`;
     }
 
-    topicVideosMap = new Map();
-    if (data.topics) {
-      for (const [topicId, vList] of Object.entries(data.topics)) {
-        topicVideosMap.set(topicId, vList);
-      }
-    }
+    topicVideosMap = buildTopicVideosMap(data.items || []);
   } catch (error) {
     console.error("影片資料載入錯誤：", error);
     alertBox.className = "mb-6 rounded-2xl p-4 border border-red-300 bg-red-50 text-red-900 text-sm flex items-start gap-3";
@@ -58,8 +103,7 @@ async function refreshVideoData() {
       </div>
     `;
     alertBox.classList.remove("hidden");
-    topicVideosMap = new Map();
-    CONFIG.TOPICS.forEach(t => topicVideosMap.set(t.id, []));
+    topicVideosMap = buildTopicVideosMap([]);
   } finally {
     loadingEl.classList.add("hidden");
     renderCurrentView();
