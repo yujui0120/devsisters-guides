@@ -13,7 +13,6 @@ const CONFIG = {
       name: "跑跑薑餅人：烤箱大逃亡",
       icon: "fa-person-running",
       hiddenHashtags: [
-        "#跑跑薑餅人",
         "#烤箱大逃亡",
         "#CookieRunOvenBreak",
         "#OvenBreak",
