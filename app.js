@@ -153,6 +153,10 @@ function renderOverviewSections() {
   const container = document.getElementById("overviewContainer");
   const q = searchQuery.trim().toLowerCase();
 
+  // 手機介面預覽 1 部，電腦介面預覽 PREVIEW_VIDEOS_COUNT (4部)
+  const isMobile = window.innerWidth < 640;
+  const currentPreviewCount = isMobile ? 1 : PREVIEW_VIDEOS_COUNT;
+
   container.innerHTML = CONFIG.TOPICS.map(topic => {
     let videos = topicVideosMap.get(topic.id) || [];
 
@@ -164,7 +168,7 @@ function renderOverviewSections() {
       );
     }
 
-    const previewVideos = videos.slice(0, PREVIEW_VIDEOS_COUNT);
+    const previewVideos = videos.slice(0, currentPreviewCount);
 
     const bodyHtml =
       previewVideos.length > 0
