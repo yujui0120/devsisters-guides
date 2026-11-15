@@ -7,6 +7,7 @@ const CONFIG = {
     "UCG0QOZXtIAKYKUqzJbX45Fw", //香香
     "UCh9bqVA6SOKjOmnEFgWKrVw", //GPZ(烤箱)
     "UCHW15T0wXV9ocDzuXev9_jQ", //BU(經典版)
+    "UCHXSUBYcGMgpJdgds8-_nqw", //Sparky(餅塔)
     ""
   ],
   TOPICS: [
